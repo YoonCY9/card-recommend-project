@@ -1,12 +1,15 @@
 package card_recommend_project.card_recommend_project;
 
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.criteria.CriteriaBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Repository
 public class CardQueryRepository {
@@ -20,15 +23,35 @@ public class CardQueryRepository {
 
 
     public List<Card> findAll(
-        List<String> cardBrand,
+        List<String> cardBrands,
         Integer record,
         Integer fee,
         List<String> benefit
     ) {
         return jpaQueryFactory
                 .selectFrom(card)
-                .where()
+                .where(
+                        //월사용액 필터
+                        filterCardsBySpending(record)
+                        findByKeyWord(cardBrands)
+                )
                 .fetch();
+    }
+
+    private BooleanExpression filterCardsBySpending(Integer record) {
+        if (record == null) {
+            return null;
+        }
+        switch (record) {
+            case 30:
+                return card.cardRecord.loe(300000);
+            case 50:
+                return card.cardRecord.loe(500000);
+            case 51:
+                return card.cardRecord.gt(500000);
+            default:
+                return null;
+        }
     }
 
     public List<BooleanExpression> findByKeyWord(List<String> cardBrands) {

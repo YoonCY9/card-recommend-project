@@ -10,4 +10,8 @@ public class Offer {
     private Card_In_Out type;
 
     private int amount;
+
+    public Offer() {
+    }
+
 }
