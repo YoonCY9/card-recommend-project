@@ -7,6 +7,7 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -22,7 +23,7 @@ public class CardQueryRepository {
 
 
     public List<Card> findAll(
-        List<String> cardBrand,
+        List<String> cardBrands,
         Integer record,
         Integer fee,
         List<String> benefit
@@ -32,6 +33,7 @@ public class CardQueryRepository {
                 .where(
                         //월사용액 필터
                         filterCardsBySpending(record)
+                        findByKeyWord(cardBrands)
                 )
                 .fetch();
     }
@@ -52,4 +54,12 @@ public class CardQueryRepository {
         }
     }
 
+    public List<BooleanExpression> findByKeyWord(List<String> cardBrands) {
+        if (cardBrands == null) {
+            return null;
+        }
+        return cardBrands.stream()
+                .map(cardBrand -> card.cardBrand.eq(cardBrand))
+                .toList();
+    }
 }
