@@ -20,10 +20,11 @@ public class CardService {
 
 
     public List<CardResponse> findAll() {
-        return cardQueryRepository.findAll()
+        return null;
+        /*cardQueryRepository.findAll()
                 .stream()
                 .map(card -> new CardResponse())
-                .toList();
+                .toList();*/
     }
 
     public CardDetailResponse findById(Long cardId) {
