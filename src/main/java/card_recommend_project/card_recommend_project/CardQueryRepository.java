@@ -1,6 +1,7 @@
 package card_recommend_project.card_recommend_project;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,7 +17,15 @@ public class CardQueryRepository {
     }
 
 
-    public List<Card> findAll() {
-        return null;
+    public List<Card> findAll(
+        List<String> cardBrand,
+        Integer record,
+        Integer fee,
+        List<String> benefit
+    ) {
+        return jpaQueryFactory
+                .selectFrom(card)
+                .where()
+                .fetch();
     }
 }

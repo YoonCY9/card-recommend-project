@@ -4,6 +4,7 @@ import card_recommend_project.card_recommend_project.dto.CardDetailResponse;
 import card_recommend_project.card_recommend_project.dto.CardResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -18,8 +19,11 @@ public class CardController {
     }
 
     @GetMapping("/cards")
-    public List<CardResponse> read(){
-        return cardService.findAll();
+    public List<CardResponse> read(@RequestParam(required = false) List<String> cardBrand,
+                                   @RequestParam(required = false) int record,
+                                   @RequestParam(required = false) int fee,
+                                   @RequestParam(required = false)List<String> benefit){
+        return cardService.findAll(cardBrand,record,fee,benefit);
     }
 
     @GetMapping("/cards/{cardId}")
