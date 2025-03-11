@@ -9,7 +9,7 @@ public class CardBenefit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private Category bnfName;
 
     private String bnfContent;
