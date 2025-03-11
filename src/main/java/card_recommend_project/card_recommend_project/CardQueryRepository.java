@@ -5,7 +5,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -29,11 +28,30 @@ public class CardQueryRepository {
         return jpaQueryFactory
                 .selectFrom(card)
                 .where(
+                        //월사용액 필터
+                        filterCardsBySpending(record),
+                        findByKeyWord(cardBrands),
                         findByFee(fee != null ? String.valueOf(fee) : null)
                 )
                 .fetch();
     }
 
+  private BooleanExpression filterCardsBySpending(Integer record) {
+        if (record == null) {
+            return null;
+        }
+        switch (record) {
+            case 30:
+                return card.cardRecord.loe(300000);
+            case 50:
+                return card.cardRecord.loe(500000);
+            case 51:
+                return card.cardRecord.gt(500000);
+            default:
+                return null;
+        }
+    }
+  
     private BooleanExpression findByFee(String feeStatus){
         if(feeStatus==null){
             return null;
@@ -49,7 +67,6 @@ public class CardQueryRepository {
         }
 
     }
-
 
     public BooleanExpression cardBrand(List<String> cardBrands) {
         if (cardBrands == null) {
