@@ -22,7 +22,7 @@ public class CardController {
     public List<CardResponse> read(@RequestParam(required = false) List<String> cardBrand,
                                    @RequestParam(required = false) int record,
                                    @RequestParam(required = false) int fee,
-                                   @RequestParam(required = false)List<String> benefit){
+                                   @RequestParam(required = false)List<Category> benefit){
         return cardService.findAll(cardBrand,record,fee,benefit);
     }
 
