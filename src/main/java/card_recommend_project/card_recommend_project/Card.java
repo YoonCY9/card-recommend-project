@@ -33,7 +33,7 @@ public class Card {
 
     private int cardRecord;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private List<Overseas> cardOverseas;
 
     protected Card() {
