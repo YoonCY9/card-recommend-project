@@ -21,10 +21,10 @@ public class CardQueryRepository {
 
 
     public List<Card> findAll(
-        List<String> cardBrand,
-        Integer record,
-        Integer fee,
-        List<String> benefit
+            List<String> cardBrand,
+            Integer record,
+            Integer fee,
+            List<String> benefit
     ) {
         return jpaQueryFactory
                 .selectFrom(card)
@@ -33,7 +33,6 @@ public class CardQueryRepository {
                 )
                 .fetch();
     }
-
 
     private BooleanExpression findByFee(String feeStatus){
         if(feeStatus==null){
@@ -52,13 +51,11 @@ public class CardQueryRepository {
     }
 
 
-    public List<BooleanExpression> findByKeyWord(List<String> cardBrands) {
+    public BooleanExpression cardBrand(List<String> cardBrands) {
         if (cardBrands == null) {
             return null;
         }
-        return cardBrands.stream()
-                .map(cardBrand -> card.cardBrand.eq(cardBrand))
-                .toList();
+        return card.cardBrand.in(cardBrands);
     }
 
 }
