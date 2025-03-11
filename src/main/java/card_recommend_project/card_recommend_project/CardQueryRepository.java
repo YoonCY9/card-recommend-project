@@ -20,7 +20,7 @@ public class CardQueryRepository {
 
 
     public List<Card> findAll(
-            List<String> cardBrand,
+            List<String> cardBrands,
             Integer record,
             Integer fee,
             List<String> benefit
@@ -30,7 +30,7 @@ public class CardQueryRepository {
                 .where(
                         //월사용액 필터
                         filterCardsBySpending(record),
-                        findByKeyWord(cardBrands),
+                        cardBrand(cardBrands),
                         findByFee(fee != null ? String.valueOf(fee) : null)
                 )
                 .fetch();
