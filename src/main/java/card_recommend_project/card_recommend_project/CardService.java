@@ -19,7 +19,7 @@ public class CardService {
     private final CardQueryRepository cardQueryRepository;
 
 
-    public List<CardResponse> findAll(List<String> cardBrand, int record, int fee, List<String> benefit) {
+    public List<CardResponse> findAll(List<String> cardBrand, int record, int fee, List<Category> benefit) {
         return null;
         /*cardQueryRepository.findAll()
                 .stream()
