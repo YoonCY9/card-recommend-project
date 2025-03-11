@@ -31,14 +31,11 @@ public class Card {
 
     private String cardImg;
 
-    private int cardRecord;
+    private String cardRecord;
 
     @Enumerated
     private List<Overseas> cardOverseas;
 
     protected Card() {
     }
-
-
-
 }
