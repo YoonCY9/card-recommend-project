@@ -5,6 +5,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -33,6 +34,7 @@ public class CardQueryRepository {
                 .fetch();
     }
 
+
     private BooleanExpression findByFee(String feeStatus){
         if(feeStatus==null){
             return null;
@@ -47,6 +49,16 @@ public class CardQueryRepository {
             return card.domesticOffer.amount.gt(50000).and(card.overseasOffer.amount.gt(50000));
         }
 
+    }
+
+
+    public List<BooleanExpression> findByKeyWord(List<String> cardBrands) {
+        if (cardBrands == null) {
+            return null;
+        }
+        return cardBrands.stream()
+                .map(cardBrand -> card.cardBrand.eq(cardBrand))
+                .toList();
     }
 
 }
