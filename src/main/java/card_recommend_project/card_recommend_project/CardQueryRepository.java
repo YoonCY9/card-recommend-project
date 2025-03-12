@@ -1,6 +1,7 @@
 package card_recommend_project.card_recommend_project;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -67,19 +68,22 @@ public class CardQueryRepository {
     }
 
     private BooleanExpression hasBenefitCategories(List<Category> benefit) {
-        if (benefit == null||benefit.isEmpty()) {
+        if (benefit == null || benefit.isEmpty()) {
             return null;
         }
-        return card.id.in(
-                JPAExpressions.select(cardBenefit.cardId.id) // CardBenefit의 Card의 id를 선택
-                        .from(cardBenefit) // CardBenefit 엔티티에서
-                        .where(cardBenefit.bnfName.in(benefit)) // bnfName이 benefit 리스트에 포함된 것만
-        );
-//        현재 메서드(findAll)의 반환 타입은 List<Card>
-//        그런데 조건으로 사용하려는 필드는 Card 엔티티 자체가 아니라,
-//        연관된 엔티티인 CardBenefit에 존재하는 필드(bnfName)이다.
-//        즉, 다른 엔티티의 필드를 기준으로 필터링하려면, 반드시 서브쿼리 또는 조인을 사용해야 함.
-        // (조인은 양방향일때 사용가능)
+
+        // 모든 benefit이 cardBenefit에 존재해야 하므로, 각각의 benefit에 대해 서브쿼리를 작성
+        BooleanExpression condition = Expressions.asBoolean(true).isTrue(); // 기본값 true
+        for (Category category : benefit) {
+            condition = condition.and(
+                    card.id.in(
+                            JPAExpressions.select(cardBenefit.cardId.id)
+                                    .from(cardBenefit)
+                                    .where(cardBenefit.bnfName.eq(category)) // 각 category에 대해 검증
+                    )
+            );
+        }
+        return condition;
     }
 
 }
