@@ -3,6 +3,7 @@ package card_recommend_project.card_recommend_project;
 import card_recommend_project.card_recommend_project.dto.CardBenefitResponse;
 import card_recommend_project.card_recommend_project.dto.CardDetailResponse;
 import card_recommend_project.card_recommend_project.dto.CardResponse;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -24,9 +25,9 @@ public class CardService {
 
 
 
-    public List<CardResponse> findAll(List<String> cardBrand, Integer record, Integer fee, List<Category> benefit) {
+    public List<CardResponse> findAll(List<String> cardBrand, Integer record, Integer fee, List<Category> benefit, Pageable pageable) {
 
-         return cardQueryRepository.findAll(cardBrand, record, fee, benefit)
+         return cardQueryRepository.findAll(cardBrand, record, fee, benefit, pageable)
                  .stream()
                  .map(c -> new CardResponse(
                          c.getId(),
