@@ -20,8 +20,8 @@ public class CardController {
 
     @GetMapping("/cards")
     public List<CardResponse> read(@RequestParam(required = false) List<String> cardBrand,
-                                   @RequestParam(required = false) int record,
-                                   @RequestParam(required = false) int fee,
+                                   @RequestParam(required = false) Integer record,
+                                   @RequestParam(required = false) Integer fee,
                                    @RequestParam(required = false)List<Category> benefit){
         return cardService.findAll(cardBrand,record,fee,benefit);
     }

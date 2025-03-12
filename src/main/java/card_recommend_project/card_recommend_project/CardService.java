@@ -12,16 +12,19 @@ import java.util.NoSuchElementException;
 @Service
 public class CardService {
 
-    public CardService(CardRepository cardRepository, CardQueryRepository cardQueryRepository) {
+    public CardService(CardRepository cardRepository, CardQueryRepository cardQueryRepository, CardBenefitRepository cardBenefitRepository) {
         this.cardRepository = cardRepository;
         this.cardQueryRepository = cardQueryRepository;
+        this.cardBenefitRepository = cardBenefitRepository;
     }
 
     private final CardRepository cardRepository;
     private final CardQueryRepository cardQueryRepository;
+    private final CardBenefitRepository cardBenefitRepository;
 
 
-    public List<CardResponse> findAll(List<String> cardBrand, int record, int fee, List<Category> benefit) {
+
+    public List<CardResponse> findAll(List<String> cardBrand, Integer record, Integer fee, List<Category> benefit) {
 
          return cardQueryRepository.findAll(cardBrand, record, fee, benefit)
                  .stream()
@@ -29,10 +32,7 @@ public class CardService {
                          c.getId(),
                          c.getCardName(),
                          c.getCardImg(),
-                         c.getCardBenefits()
-                                 .stream()
-                                 .map(b-> b.getBnfContent())
-                                 .toList(),
+                         cardBenefitRepository.findByCardId_Id(c.getId()).stream().map(b -> b.getBnfContent()).toList(),
                          c.getCardRecord()))
                  .toList();
     }

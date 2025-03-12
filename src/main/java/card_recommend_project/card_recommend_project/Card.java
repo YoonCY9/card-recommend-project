@@ -2,8 +2,6 @@ package card_recommend_project.card_recommend_project;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -34,13 +32,10 @@ public class Card {
 
     private String cardImg;
 
-    private int cardRecord;
+    private Integer cardRecord;
 
-    @Enumerated(EnumType.STRING)
-    private List<Overseas> cardOverseas;
-
-    @OneToMany
-    private List<CardBenefit> cardBenefits = new ArrayList<>();
+//    @Enumerated(EnumType.STRING)
+    private List<String> cardOverseas;
 
     protected Card() {
     }
