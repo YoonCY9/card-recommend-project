@@ -9,5 +9,5 @@ public class Offer {
     @Enumerated
     private Card_In_Out type;
 
-    private int amount;
+    private Integer amount;
 }
