@@ -33,7 +33,7 @@ public class CardQueryRepository {
                         //월사용액 필터
                         filterCardsBySpending(record),
                         cardBrand(cardBrands),
-                        findByFee(fee != null ? String.valueOf(fee) : null),
+                        findByFee(fee),
                         hasBenefitCategories(benefit)
                 )
                 .fetch();
@@ -55,14 +55,14 @@ public class CardQueryRepository {
         }
     }
   
-    private BooleanExpression findByFee(String feeStatus){
-        if(feeStatus==null){
+    private BooleanExpression findByFee(Integer fee){
+        if(fee==null){
             return null;
         }
-        if(feeStatus.equals("~30000")){
+        if(fee.equals(30000)){
             return card.domesticOffer.amount.loe(30000).and(card.overseasOffer.amount.loe(30000));
         }
-        if(feeStatus.equals("~50000")){
+        if(fee.equals(50000)){
             return card.domesticOffer.amount.loe(50000).and(card.overseasOffer.amount.loe(50000));
         }
         else {
