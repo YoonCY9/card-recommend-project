@@ -4,6 +4,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.criteria.CriteriaBuilder;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -25,7 +26,8 @@ public class CardQueryRepository {
             List<String> cardBrands,
             Integer record,
             Integer fee,
-            List<Category> benefit
+            List<Category> benefit,
+            Pageable pageable
     ) {
         return jpaQueryFactory
                 .selectFrom(card)
@@ -36,6 +38,8 @@ public class CardQueryRepository {
                         findByFee(fee),
                         hasBenefitCategories(benefit)
                 )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
     }
 
