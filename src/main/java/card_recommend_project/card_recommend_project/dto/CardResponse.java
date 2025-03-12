@@ -1,10 +1,15 @@
 package card_recommend_project.card_recommend_project.dto;
 
+import card_recommend_project.card_recommend_project.CardBenefit;
+
+import java.util.List;
+
 public record CardResponse(
         Long id,
         String name,
         String img,
-        String benefit,
-        String record
+        List<String> bnfContent,
+        int record
 ) {
+
 }

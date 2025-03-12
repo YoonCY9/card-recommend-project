@@ -83,7 +83,7 @@ public class CardQueryRepository {
             return null;
         }
         return card.id.in(
-                JPAExpressions.select(cardBenefit.cardId.id) // CardBenefit의 Card의 id를 선택
+                JPAExpressions.select(cardBenefit.card.id) // CardBenefit의 Card의 id를 선택
                         .from(cardBenefit) // CardBenefit 엔티티에서
                         .where(cardBenefit.bnfName.in(benefit)) // bnfName이 benefit 리스트에 포함된 것만
         );
