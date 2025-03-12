@@ -1,8 +1,10 @@
 package card_recommend_project.card_recommend_project;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 @Entity
+@Getter
 public class CardBenefit {
 
     @Id
@@ -17,7 +19,7 @@ public class CardBenefit {
     private String bnfDetail;
 
     @ManyToOne
-    private Card cardId;
+    private Card card;
 
     protected CardBenefit() {
     }
