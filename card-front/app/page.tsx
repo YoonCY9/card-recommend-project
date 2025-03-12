@@ -57,11 +57,11 @@ export default function CardRecommendationPage() {
   ]
 
   const brandOptions = [
-    { value: "shinhan", label: "신한카드" },
-    { value: "samsung", label: "삼성카드" },
-    { value: "hyundai", label: "현대카드" },
-    { value: "kb", label: "KB국민카드" },
-    { value: "woori", label: "우리카드" },
+    { value: "신한카드", label: "신한카드" },
+    { value: "삼성카드", label: "삼성카드" },
+    { value: "현대카드", label: "현대카드" },
+    { value: "KB국민카드", label: "KB국민카드" },
+    { value: "우리카드", label: "우리카드" },
   ]
 
   const monthlySpendOptions = [
