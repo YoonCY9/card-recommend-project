@@ -1,11 +1,13 @@
 package card_recommend_project.card_recommend_project;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Getter
 public class Card {
 
     @Id
