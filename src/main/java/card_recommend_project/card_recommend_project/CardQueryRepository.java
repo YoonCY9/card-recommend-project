@@ -43,31 +43,15 @@ public class CardQueryRepository {
         if (record == null) {
             return null;
         }
-        switch (record) {
-            case 30:
-                return card.cardRecord.loe(300000);
-            case 50:
-                return card.cardRecord.loe(500000);
-            case 51:
-                return card.cardRecord.gt(500000);
-            default:
-                return null;
-        }
+        return card.cardRecord.loe(record);
     }
   
     private BooleanExpression findByFee(Integer fee){
         if(fee==null){
             return null;
         }
-        if(fee.equals(30000)){
-            return card.domesticOffer.amount.loe(30000).and(card.overseasOffer.amount.loe(30000));
-        }
-        if(fee.equals(50000)){
-            return card.domesticOffer.amount.loe(50000).and(card.overseasOffer.amount.loe(50000));
-        }
-        else {
-            return card.domesticOffer.amount.gt(50000).and(card.overseasOffer.amount.gt(50000));
-        }
+        return card.domesticOffer.amount.loe(fee).or(card.overseasOffer.amount.loe(fee));
+
 
     }
 
