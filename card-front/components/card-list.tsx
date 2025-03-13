@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from "@/components/ui/badge"
 import { CreditCard, ArrowRight, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import CardSkeleton from "@/components/card-skeleton";
 
 
 // API response type (CardResponse)
@@ -233,9 +234,9 @@ export default function CardList({ filters }: CardListProps) {
 
             {loading ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    {/*{[1, 2, 3, 4, 5, 6].map((i) => (*/}
-                    {/*    <CardSkeleton key={i} />*/}
-                    {/*))}*/}
+                    {[1, 2, 3, 4, 5, 6].map((i) => (
+                        <CardSkeleton key={i} />
+                    ))}
                 </div>
             ) : cards.length === 0 ? (
                 <div className="text-center py-16 bg-mesh rounded-xl border border-border">
