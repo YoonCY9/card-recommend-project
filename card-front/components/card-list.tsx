@@ -19,6 +19,7 @@ interface CardResponse {
     domesticOfferAmount: string
     overseasOfferAmount: string
     bnfDetail?: string
+    totalCount:number
 }
 
 // 페이지 응답 타입 추가
@@ -45,6 +46,8 @@ export default function CardList({ filters }: CardListProps) {
     const [error, setError] = useState<string | null>(null)
     const [currentPage, setCurrentPage] = useState(1)
     const [totalPages, setTotalPages] = useState(1)
+    const [totalCount, setTotalCount] = useState(0);
+
 
     const mapMonthlySpendToRecord = (option: string): number | null => {
         switch (option) {
@@ -123,13 +126,14 @@ export default function CardList({ filters }: CardListProps) {
                 if (!res.ok) {
                     throw new Error("네트워크 응답이 올바르지 않습니다.")
                 }
-
                 // 응답을 PageResponse 형태로 받음
                 const pageData = await res.json() as PageResponse
 
+
                 // 카드 데이터와 페이지 정보 설정
-                setCards(pageData.cardResponse)
-                setTotalPages(pageData.totalPages)
+                setCards(pageData.cardResponse);
+                setTotalPages(pageData.totalPages);
+                setTotalCount(pageData.totalCount);
                 setLoading(false)
             } catch (err) {
                 console.error("카드 데이터를 불러오는 중 오류:", err)
@@ -211,8 +215,9 @@ export default function CardList({ filters }: CardListProps) {
                 <div className="flex items-center">
                     <h2 className="text-2xl font-bold text-gradient">추천 카드</h2>
                     <Badge className="ml-3 px-3 py-1 text-sm font-medium bg-primary text-white border-none">
-                        {loading ? "검색 중..." : `${cards.length}개 찾음`}
+                      {loading ? "검색 중..." : `${totalCount}개 찾음`}
                     </Badge>
+
                 </div>
 
                 {filters.brands.length > 0 || filters.monthlySpend.length > 0 || filters.benefits.length > 0 ? (
