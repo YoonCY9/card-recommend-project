@@ -2,7 +2,9 @@ package card_recommend_project.card_recommend_project;
 
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.Enumerated;
+import lombok.Getter;
 
+@Getter
 @Embeddable
 public class Offer {
 
@@ -10,4 +12,6 @@ public class Offer {
     private Card_In_Out type;
 
     private Integer amount;
+
+
 }
