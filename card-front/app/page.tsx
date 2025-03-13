@@ -67,19 +67,31 @@ export default function CardRecommendationPage() {
     { value: "TELECOM_MISC", label: "통신/기타", icon: <Radio className="h-4 w-4" /> },
   ]
 
+  // 확장된 카드 브랜드 목록
   const brandOptions = [
     { value: "신한카드", label: "신한카드" },
     { value: "삼성카드", label: "삼성카드" },
     { value: "현대카드", label: "현대카드" },
     { value: "KB국민카드", label: "KB국민카드" },
     { value: "우리카드", label: "우리카드" },
+    { value: "롯데카드", label: "롯데카드" },
+    { value: "NH농협카드", label: "NH농협카드" },
+    { value: "하나카드", label: "하나카드" },
+    { value: "BC카드", label: "BC카드" },
+    { value: "씨티카드", label: "씨티카드" },
+    { value: "카카오뱅크", label: "카카오뱅크" },
+    { value: "토스뱅크", label: "토스뱅크" },
   ]
 
+  // 세분화된 월 사용액 필터
   const monthlySpendOptions = [
-    { value: "under300k", label: "30만원 미만" },
-    { value: "under500k", label: "50만원 미만" },
+    { value: "under100k", label: "10만원 미만" },
+    { value: "100k-300k", label: "10만원-30만원" },
+    { value: "300k-500k", label: "30만원-50만원" },
+    { value: "500k-700k", label: "50만원-70만원" },
+    { value: "700k-1m", label: "70만원-100만원" },
+    { value: "over1m", label: "100만원 이상" },
   ]
-
 
   const annualFeeOptions = [
     { value: "free", label: "무료" },
@@ -197,7 +209,7 @@ export default function CardRecommendationPage() {
                   >
                     필터 초기화
                   </Button>
-                  <Button size="sm" className="bg-primary hover:bg-primary/90 text-white">
+                  <Button size="sm" className="bg-black hover:bg-black/90 text-white">
                     <Search className="h-4 w-4 mr-2" />
                     검색하기
                   </Button>
