@@ -26,4 +26,5 @@ public class CardBenefit {
 
     protected CardBenefit() {
     }
+
 }

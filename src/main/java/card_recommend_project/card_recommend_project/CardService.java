@@ -34,9 +34,8 @@ public class CardService {
                          c.getCardImg(),
                          cardBenefitRepository.findByCardId_Id(c.getId()).stream().map(b -> b.getBnfContent()).toList(),
                          c.getCardRecord(),
-                         c.getCardBrand(),
-                         c.getDomesticOffer().,
-                         c.getOverseasOffer()))
+                         c.getCardBrand()
+                        ))
                  .toList();
     }
 
