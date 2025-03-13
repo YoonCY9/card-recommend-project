@@ -13,7 +13,7 @@ import java.util.NoSuchElementException;
 
 @Service
 public class CardService {
-  
+
     private final CardRepository cardRepository;
     private final CardQueryRepository cardQueryRepository;
     private final CardBenefitRepository cardBenefitRepository;
@@ -53,6 +53,25 @@ public class CardService {
     public CardDetailResponse findById(Long cardId) {
         Card card = cardRepository.findById(cardId)
                 .orElseThrow(() -> new NoSuchElementException("카드가 없습니다."));
-        return null;
+        List<CardBenefit> cardBenefits = cardBenefitRepository.findByCardId_Id(card.getId());
+        List<CardBenefitResponse> cardBenefitResponses = cardBenefits.stream()
+                .map(cardBenefit -> new CardBenefitResponse(
+                        cardBenefit.getBnfName(),
+                        cardBenefit.getBnfContent(),
+                        cardBenefit.getBnfDetail()))
+                .toList();
+
+        return new CardDetailResponse(
+                card.getId(),
+                card.getCardName(),
+                card.getCardBrand(),
+                card.getCardImg(),
+                card.getSafeDomesticOfferType(),
+                card.getSafeDomesticOfferAmount(),
+                card.getSafeOverseasOfferType(),
+                card.getSafeOverseasOfferAmount(),
+                card.getCardRecord(),
+                card.getCardOverseas(),
+                cardBenefitResponses);
     }
 }
