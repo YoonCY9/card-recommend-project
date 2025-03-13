@@ -2,6 +2,7 @@ package card_recommend_project.card_recommend_project;
 
 import card_recommend_project.card_recommend_project.dto.CardDetailResponse;
 import card_recommend_project.card_recommend_project.dto.CardResponse;
+import card_recommend_project.card_recommend_project.dto.PageResponse;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,12 +22,12 @@ public class CardController {
     }
 
     @GetMapping("/cards")
-    public List<CardResponse> read(@RequestParam(required = false) List<String> cardBrand,
-                                   @RequestParam(required = false) Integer record,
-                                   @RequestParam(required = false) Integer fee,
-                                   @RequestParam(required = false)List<Category> benefit,
-                                   @RequestParam(defaultValue = "1") int page,
-                                   @RequestParam(defaultValue = "10") int size){
+    public PageResponse read(@RequestParam(required = false) List<String> cardBrand,
+                             @RequestParam(required = false) Integer record,
+                             @RequestParam(required = false) Integer fee,
+                             @RequestParam(required = false)List<Category> benefit,
+                             @RequestParam(defaultValue = "1") int page,
+                             @RequestParam(defaultValue = "10") int size){
         Pageable pageable = PageRequest.of(page-1, size);
         return cardService.findAll(cardBrand,record,fee,benefit,pageable);
     }

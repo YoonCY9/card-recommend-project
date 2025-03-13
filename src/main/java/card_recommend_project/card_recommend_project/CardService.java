@@ -3,6 +3,7 @@ package card_recommend_project.card_recommend_project;
 import card_recommend_project.card_recommend_project.dto.CardBenefitResponse;
 import card_recommend_project.card_recommend_project.dto.CardDetailResponse;
 import card_recommend_project.card_recommend_project.dto.CardResponse;
+import card_recommend_project.card_recommend_project.dto.PageResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -25,18 +26,29 @@ public class CardService {
 
 
 
-    public List<CardResponse> findAll(List<String> cardBrand, Integer record, Integer fee, List<Category> benefit, Pageable pageable) {
+    public PageResponse findAll(List<String> cardBrand, Integer record, Integer fee, List<Category> benefit, Pageable pageable) {
 
-         return cardQueryRepository.findAll(cardBrand, record, fee, benefit, pageable)
-                 .stream()
-                 .map(c -> new CardResponse(
-                         c.getId(),
-                         c.getCardName(),
-                         c.getCardImg(),
-                         cardBenefitRepository.findByCardId_Id(c.getId()).stream().map(b -> b.getBnfContent()).toList(),
-                         c.getCardRecord()))
-                 .toList();
+        List<CardResponse> list = cardQueryRepository.findAll(cardBrand, record, fee, benefit, pageable)
+                .stream()
+                .map(c -> new CardResponse(
+                        c.getId(),
+                        c.getCardName(),
+                        c.getCardImg(),
+                        cardBenefitRepository.findByCardId_Id(c.getId()).stream().map(b -> b.getBnfContent()).toList(),
+                        c.getCardRecord()))
+                .toList();
+
+        long totalCount = cardQueryRepository.countFiltered(cardBrand, record, fee, benefit);
+        int totalPage=(int)Math.ceil((double)totalCount/ pageable.getPageSize());
+        return new PageResponse(
+                totalPage,
+                totalCount,
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                list
+        );
     }
+
 
     public CardDetailResponse findById(Long cardId) {
         Card card = cardRepository.findById(cardId)

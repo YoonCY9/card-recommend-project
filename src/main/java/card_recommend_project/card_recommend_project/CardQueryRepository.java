@@ -44,6 +44,35 @@ public class CardQueryRepository {
                 .fetch();
     }
 
+    // 전체 카드 개수 조회
+    public long countTotal() {
+        Long count = jpaQueryFactory
+                .select(card.count())
+                .from(card)
+                .fetchOne();
+        return count != null ? count : 0L;
+    }
+
+    // 필터링된 카드 개수 조회
+    public long countFiltered(
+            List<String> cardBrands,
+            Integer record,
+            Integer fee,
+            List<Category> benefit
+    ) {
+        Long count = jpaQueryFactory
+                .select(card.count())
+                .from(card)
+                .where(
+                        filterCardsBySpending(record),
+                        cardBrand(cardBrands),
+                        findByFee(fee),
+                        hasBenefitCategories(benefit)
+                )
+                .fetchOne();
+        return count != null ? count : 0L;
+    }
+
   private BooleanExpression filterCardsBySpending(Integer record) {
         if (record == null) {
             return null;
