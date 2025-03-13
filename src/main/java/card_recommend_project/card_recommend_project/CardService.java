@@ -28,18 +28,18 @@ public class CardService {
 
         List<CardResponse> list = cardQueryRepository.findAll(cardBrand, record, fee, benefit, pageable)
                 .stream()
-                 .map(c -> new CardResponse(
-                         c.getId(),
-                         c.getCardName(),
-                         c.getCardImg(),
-                         cardBenefitRepository.findByCardId_Id(c.getId()).stream().map(b -> b.getBnfContent()).toList(),
-                         c.getCardRecord(),
-                         c.getCardBrand()
-                        ))
-                 .toList();
+                .map(c -> new CardResponse(
+                        c.getId(),
+                        c.getCardName(),
+                        c.getCardImg(),
+                        cardBenefitRepository.findByCardId_Id(c.getId()).stream().map(b -> b.getBnfContent()).toList(),
+                        c.getCardRecord(),
+                        c.getCardBrand()
+                ))
+                .toList();
 
         long totalCount = cardQueryRepository.countFiltered(cardBrand, record, fee, benefit);
-        int totalPage=(int)Math.ceil((double)totalCount/ pageable.getPageSize());
+        int totalPage = (int) Math.ceil((double) totalCount / pageable.getPageSize());
         return new PageResponse(
                 totalPage,
                 totalCount,
@@ -47,6 +47,7 @@ public class CardService {
                 pageable.getPageSize(),
                 list
         );
+    }
 
 
     public CardDetailResponse findById(Long cardId) {

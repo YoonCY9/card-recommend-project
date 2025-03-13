@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from "@/components/ui/badge"
 import { CreditCard, ArrowRight, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import CardSkeleton from "./card-skeleton"
+
 
 // API response type (CardResponse)
 interface CardResponse {
@@ -100,20 +100,20 @@ export default function CardList({ filters }: CardListProps) {
         const fetchCards = async () => {
                 const params = new URLSearchParams()
 
-                if (filters.brands.length > 0) {
-                    filters.brands.forEach((brand) => params.append("cardBrand", brand))
-                }
-                if (filters.monthlySpend.length > 0) {
-                    const recordValue = mapMonthlySpendToRecord(filters.monthlySpend[0])
-                    if (recordValue !== null) params.append("record", recordValue.toString())
-                }
-                if (filters.annualFee.length > 0) {
-                    const feeValue = mapAnnualFeeToFee(filters.annualFee[0])
-                    if (feeValue !== null) params.append("fee", feeValue.toString())
-                }
-                if (filters.benefits.length > 0) {
-                    filters.benefits.forEach((benefit) => params.append("benefit", benefit))
-                }
+            if (filters.brands.length > 0) {
+                filters.brands.forEach((brand) => params.append("cardBrand", brand))
+            }
+            if (filters.monthlySpend.length > 0) {
+                const recordValue = mapMonthlySpendToRecord(filters.monthlySpend[0])
+                if (recordValue !== null) params.append("record", recordValue.toString())
+            }
+            if (filters.annualFee.length > 0) {
+                const feeValue = mapAnnualFeeToFee(filters.annualFee[0])
+                if (feeValue !== null) params.append("fee", feeValue.toString())
+            }
+            if (filters.benefits.length > 0) {
+                filters.benefits.forEach((benefit) => params.append("benefit", benefit))
+            }
 
             // 페이지 파라미터 추가 (페이지는 0부터 시작하는 경우 -1 처리)
             params.append("page", currentPage.toString())
@@ -233,9 +233,9 @@ export default function CardList({ filters }: CardListProps) {
 
             {loading ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    {[1, 2, 3, 4, 5, 6].map((i) => (
-                        <CardSkeleton key={i} />
-                    ))}
+                    {/*{[1, 2, 3, 4, 5, 6].map((i) => (*/}
+                    {/*    <CardSkeleton key={i} />*/}
+                    {/*))}*/}
                 </div>
             ) : cards.length === 0 ? (
                 <div className="text-center py-16 bg-mesh rounded-xl border border-border">
