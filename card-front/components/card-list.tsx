@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { CreditCard, ArrowRight, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import CardSkeleton from "@/components/card-skeleton";
+import Link from "next/link";
 
 
 // API response type (CardResponse)
@@ -305,10 +306,12 @@ export default function CardList({ filters }: CardListProps) {
                                     </div>
                                 </CardContent>
                                 <CardFooter className="pt-4 mt-auto">
+                                    <Link href={`/cards/${card.id}`} className="w-full">
                                     <Button className="w-full bg-black hover:bg-black/90 text-white transition-colors">
                                         <span>상세 정보</span>
                                         <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                                     </Button>
+                                    </Link>
                                 </CardFooter>
                             </Card>
                         </div>
