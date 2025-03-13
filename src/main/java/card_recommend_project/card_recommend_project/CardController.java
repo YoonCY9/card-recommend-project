@@ -27,7 +27,7 @@ public class CardController {
                              @RequestParam(required = false) Integer fee,
                              @RequestParam(required = false)List<Category> benefit,
                              @RequestParam(defaultValue = "1") int page,
-                             @RequestParam(defaultValue = "10") int size){
+                             @RequestParam(defaultValue = "8") int size){
         Pageable pageable = PageRequest.of(page-1, size);
         return cardService.findAll(cardBrand,record,fee,benefit,pageable);
     }

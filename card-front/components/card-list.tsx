@@ -118,7 +118,7 @@ export default function CardList({ filters }: CardListProps) {
 
             // 페이지 파라미터 추가 (페이지는 0부터 시작하는 경우 -1 처리)
             params.append("page", currentPage.toString())
-            params.append("size", "10") // 페이지당 카드 수
+            params.append("size", "8") // 페이지당 카드 수
 
             setLoading(true)
             setError(null)
@@ -150,10 +150,9 @@ export default function CardList({ filters }: CardListProps) {
     // 페이지네이션 버튼을 생성하는 함수
     const generatePaginationButtons = () => {
         const buttons = []
-        const maxVisibleButtons = 5 // 한 번에 보여줄 최대 버튼 수
+        const maxVisibleButtons = 8 // 한 번에 보여줄 최대 버튼 수
 
-        // 페이지 인덱스는 0부터 시작하므로 화면에 표시할 때는 +1
-        const displayPage = currentPage + 1
+        const displayPage = currentPage
 
         let startPage = Math.max(1, displayPage - Math.floor(maxVisibleButtons / 2))
         let endPage = Math.min(totalPages, startPage + maxVisibleButtons - 1)
@@ -163,7 +162,7 @@ export default function CardList({ filters }: CardListProps) {
         }
 
         // 이전 페이지 버튼
-        if (currentPage > 0) { // 0보다 클 때만 이전 버튼 표시
+        if (currentPage > 1) {
             buttons.push(
                 <button key="prev" onClick={() => setCurrentPage(currentPage - 1)} className="px-3 py-1 border rounded">
                     이전
@@ -176,7 +175,7 @@ export default function CardList({ filters }: CardListProps) {
             buttons.push(
                 <button
                     key={i}
-                    onClick={() => setCurrentPage(i - 1)} // 버튼 클릭시 실제 페이지 인덱스는 -1
+                    onClick={() => setCurrentPage(i)}
                     className={`px-3 py-1 border rounded ${i === displayPage ? "bg-blue-500 text-white" : "bg-white"}`}
                 >
                     {i}
@@ -185,7 +184,7 @@ export default function CardList({ filters }: CardListProps) {
         }
 
         // 다음 페이지 버튼
-        if (currentPage < totalPages - 1) { // 마지막 페이지가 아닐 때만 다음 버튼 표시
+        if (currentPage < totalPages) {
             buttons.push(
                 <button key="next" onClick={() => setCurrentPage(currentPage + 1)} className="px-3 py-1 border rounded">
                     다음
@@ -195,9 +194,6 @@ export default function CardList({ filters }: CardListProps) {
 
         return buttons
     }
-
-
-
 
 
     if (error) {
