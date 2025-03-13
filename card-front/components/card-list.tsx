@@ -14,7 +14,7 @@ interface CardResponse {
     img: string
     bnfContent: string[]
     record: number
-    brand?: string
+    brand: string
     domesticOfferAmount?: string
     overseasOfferAmount?: string
     bnfDetail?: string
@@ -172,8 +172,8 @@ export default function CardList({ filters }: CardListProps) {
                             <Card className="group h-full overflow-hidden hover:shadow-lg transition-all duration-300 border-border hover:border-primary/20 card-shine card-3d flex flex-col">
                                 <CardHeader className="pb-2">
                                     <div className="flex justify-between items-start">
-                                        <Badge className={`${getCardBrandColor(card.name)} px-2 py-0.5 text-xs font-medium`}>
-                                            {card.name.split(" ")[0]}
+                                        <Badge className={`${getCardBrandColor(card.brand)} px-2 py-0.5 text-xs font-medium`}>
+                                            {card.brand.split(" ")[0]}
                                         </Badge>
                                         <div className="flex items-center text-xs text-muted-foreground">
                                             <span>월 {(card.record / 10000).toFixed(0)}만원</span>
