@@ -15,8 +15,8 @@ interface CardResponse {
     bnfContent: string[]
     record: number
     brand: string
-    domesticOfferAmount?: string
-    overseasOfferAmount?: string
+    domesticOfferAmount: string
+    overseasOfferAmount: string
     bnfDetail?: string
 }
 
@@ -36,11 +36,15 @@ export default function CardList({ filters }: CardListProps) {
 
     const mapMonthlySpendToRecord = (option: string): number | null => {
         switch (option) {
-            case "under300k":
+            case "under100k":
+                return 100000
+            case "100k-300k":
                 return 300000
             case "300k-500k":
                 return 500000
-            case "500k-1m":
+            case "500k-700k":
+                return 700000
+            case "700k-1m":
                 return 1000000
             case "over1m":
                 return 1000001
@@ -71,47 +75,65 @@ export default function CardList({ filters }: CardListProps) {
         if (name.includes("현대")) return "bg-gray-50 text-gray-600 border-gray-200"
         if (name.includes("KB") || name.includes("국민")) return "bg-yellow-50 text-yellow-600 border-yellow-200"
         if (name.includes("우리")) return "bg-green-50 text-green-600 border-green-200"
+        if (name.includes("롯데")) return "bg-red-50 text-red-600 border-red-200"
+        if (name.includes("NH") || name.includes("농협")) return "bg-green-50 text-green-600 border-green-200"
+        if (name.includes("하나")) return "bg-emerald-50 text-emerald-600 border-emerald-200"
+        if (name.includes("BC")) return "bg-purple-50 text-purple-600 border-purple-200"
+        if (name.includes("씨티")) return "bg-blue-50 text-blue-600 border-blue-200"
+        if (name.includes("카카오")) return "bg-yellow-50 text-yellow-600 border-yellow-200"
+        if (name.includes("토스")) return "bg-blue-50 text-blue-600 border-blue-200"
         return "bg-purple-50 text-purple-600 border-purple-200"
     }
 
     useEffect(() => {
-        const fetchCards = async () => {
-            try {
-                setLoading(true)
-                setError(null)
+        // 쿼리 파라미터 구성
+        const params = new URLSearchParams()
 
-                const params = new URLSearchParams()
+        // 카드 브랜드 (cardBrand)
+        if (filters.brands.length > 0) {
+            filters.brands.forEach((brand) => params.append("cardBrand", brand))
+        }
 
-                if (filters.brands.length > 0) {
-                    filters.brands.forEach((brand) => params.append("cardBrand", brand))
-                }
-                if (filters.monthlySpend.length > 0) {
-                    const recordValue = mapMonthlySpendToRecord(filters.monthlySpend[0])
-                    if (recordValue !== null) params.append("record", recordValue.toString())
-                }
-                if (filters.annualFee.length > 0) {
-                    const feeValue = mapAnnualFeeToFee(filters.annualFee[0])
-                    if (feeValue !== null) params.append("fee", feeValue.toString())
-                }
-                if (filters.benefits.length > 0) {
-                    filters.benefits.forEach((benefit) => params.append("benefit", benefit))
-                }
-
-                // 1. fetch URL을 원래대로 변경
-                const response = await fetch(`http://localhost:8080/cards?${params.toString()}`)
-                if (!response.ok) throw new Error("Network response was not ok")
-
-                const data: CardResponse[] = await response.json()
-                setCards(data)
-            } catch (err) {
-                console.error("Error fetching cards:", err)
-                setError("Failed to load cards.")
-            } finally {
-                setLoading(false)
+        // 월 사용액 (record): 여러 옵션이 있을 경우 첫번째 값 사용 (필요시 로직 수정)
+        if (filters.monthlySpend.length > 0) {
+            const recordValue = mapMonthlySpendToRecord(filters.monthlySpend[0])
+            if (recordValue !== null) {
+                params.append("record", recordValue.toString())
             }
         }
 
-        fetchCards()
+        // 연회비 (fee)
+        if (filters.annualFee.length > 0) {
+            const feeValue = mapAnnualFeeToFee(filters.annualFee[0])
+            if (feeValue !== null) {
+                params.append("fee", feeValue.toString())
+            }
+        }
+
+        // 혜택 (benefit)
+        if (filters.benefits.length > 0) {
+            filters.benefits.forEach((benefit) => params.append("benefit", benefit))
+        }
+
+        setLoading(true)
+        setError(null)
+
+        fetch(`http://localhost:8080/cards?${params.toString()}`)
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error("네트워크 응답이 올바르지 않습니다.")
+                }
+                return res.json()
+            })
+            .then((data: CardResponse[]) => {
+                setCards(data)
+                setLoading(false)
+            })
+            .catch((err) => {
+                console.error("카드 데이터를 불러오는 중 오류:", err)
+                setError("카드를 불러오는 데 실패했습니다.")
+                setLoading(false)
+            })
     }, [filters])
 
     if (error) {
