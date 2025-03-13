@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from "@/components/ui/badge"
 import { CreditCard, ArrowRight, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import CardSkeleton from "./card-skeleton"
+
 
 // API response type (CardResponse)
 interface CardResponse {
@@ -18,6 +18,15 @@ interface CardResponse {
     domesticOfferAmount: string
     overseasOfferAmount: string
     bnfDetail?: string
+}
+
+// 페이지 응답 타입 추가
+interface PageResponse {
+    totalPages: number
+    totalCount: number
+    currentPage: number
+    pageSize: number
+    cardResponse: CardResponse[]
 }
 
 interface CardListProps {
@@ -33,6 +42,8 @@ export default function CardList({ filters }: CardListProps) {
     const [cards, setCards] = useState<CardResponse[]>([])
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
+    const [currentPage, setCurrentPage] = useState(1)
+    const [totalPages, setTotalPages] = useState(1)
 
     const mapMonthlySpendToRecord = (option: string): number | null => {
         switch (option) {
@@ -86,55 +97,107 @@ export default function CardList({ filters }: CardListProps) {
     }
 
     useEffect(() => {
-        // 쿼리 파라미터 구성
-        const params = new URLSearchParams()
+        const fetchCards = async () => {
+                const params = new URLSearchParams()
 
-        // 카드 브랜드 (cardBrand)
-        if (filters.brands.length > 0) {
-            filters.brands.forEach((brand) => params.append("cardBrand", brand))
-        }
-
-        // 월 사용액 (record): 여러 옵션이 있을 경우 첫번째 값 사용 (필요시 로직 수정)
-        if (filters.monthlySpend.length > 0) {
-            const recordValue = mapMonthlySpendToRecord(filters.monthlySpend[0])
-            if (recordValue !== null) {
-                params.append("record", recordValue.toString())
+            if (filters.brands.length > 0) {
+                filters.brands.forEach((brand) => params.append("cardBrand", brand))
             }
-        }
-
-        // 연회비 (fee)
-        if (filters.annualFee.length > 0) {
-            const feeValue = mapAnnualFeeToFee(filters.annualFee[0])
-            if (feeValue !== null) {
-                params.append("fee", feeValue.toString())
+            if (filters.monthlySpend.length > 0) {
+                const recordValue = mapMonthlySpendToRecord(filters.monthlySpend[0])
+                if (recordValue !== null) params.append("record", recordValue.toString())
             }
-        }
+            if (filters.annualFee.length > 0) {
+                const feeValue = mapAnnualFeeToFee(filters.annualFee[0])
+                if (feeValue !== null) params.append("fee", feeValue.toString())
+            }
+            if (filters.benefits.length > 0) {
+                filters.benefits.forEach((benefit) => params.append("benefit", benefit))
+            }
 
-        // 혜택 (benefit)
-        if (filters.benefits.length > 0) {
-            filters.benefits.forEach((benefit) => params.append("benefit", benefit))
-        }
+            // 페이지 파라미터 추가 (페이지는 0부터 시작하는 경우 -1 처리)
+            params.append("page", currentPage.toString())
+            params.append("size", "10") // 페이지당 카드 수
 
-        setLoading(true)
-        setError(null)
+            setLoading(true)
+            setError(null)
 
-        fetch(`http://localhost:8080/cards?${params.toString()}`)
-            .then((res) => {
+            try {
+                const res = await fetch(`http://localhost:8080/cards?${params.toString()}`)
+
                 if (!res.ok) {
                     throw new Error("네트워크 응답이 올바르지 않습니다.")
                 }
-                return res.json()
-            })
-            .then((data: CardResponse[]) => {
-                setCards(data)
+
+                // 응답을 PageResponse 형태로 받음
+                const pageData = await res.json() as PageResponse
+
+                // 카드 데이터와 페이지 정보 설정
+                setCards(pageData.cardResponse)
+                setTotalPages(pageData.totalPages)
                 setLoading(false)
-            })
-            .catch((err) => {
+            } catch (err) {
                 console.error("카드 데이터를 불러오는 중 오류:", err)
                 setError("카드를 불러오는 데 실패했습니다.")
                 setLoading(false)
-            })
-    }, [filters])
+            }
+        }
+        fetchCards() // 함수 호출
+    }, [filters, currentPage])
+
+
+    // 페이지네이션 버튼을 생성하는 함수
+    const generatePaginationButtons = () => {
+        const buttons = []
+        const maxVisibleButtons = 5 // 한 번에 보여줄 최대 버튼 수
+
+        // 페이지 인덱스는 0부터 시작하므로 화면에 표시할 때는 +1
+        const displayPage = currentPage + 1
+
+        let startPage = Math.max(1, displayPage - Math.floor(maxVisibleButtons / 2))
+        let endPage = Math.min(totalPages, startPage + maxVisibleButtons - 1)
+
+        if (endPage - startPage + 1 < maxVisibleButtons) {
+            startPage = Math.max(1, endPage - maxVisibleButtons + 1)
+        }
+
+        // 이전 페이지 버튼
+        if (currentPage > 0) { // 0보다 클 때만 이전 버튼 표시
+            buttons.push(
+                <button key="prev" onClick={() => setCurrentPage(currentPage - 1)} className="px-3 py-1 border rounded">
+                    이전
+                </button>
+            )
+        }
+
+        // 페이지 번호 버튼
+        for (let i = startPage; i <= endPage; i++) {
+            buttons.push(
+                <button
+                    key={i}
+                    onClick={() => setCurrentPage(i - 1)} // 버튼 클릭시 실제 페이지 인덱스는 -1
+                    className={`px-3 py-1 border rounded ${i === displayPage ? "bg-blue-500 text-white" : "bg-white"}`}
+                >
+                    {i}
+                </button>
+            )
+        }
+
+        // 다음 페이지 버튼
+        if (currentPage < totalPages - 1) { // 마지막 페이지가 아닐 때만 다음 버튼 표시
+            buttons.push(
+                <button key="next" onClick={() => setCurrentPage(currentPage + 1)} className="px-3 py-1 border rounded">
+                    다음
+                </button>
+            )
+        }
+
+        return buttons
+    }
+
+
+
+
 
     if (error) {
         return (
@@ -170,9 +233,9 @@ export default function CardList({ filters }: CardListProps) {
 
             {loading ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    {[1, 2, 3, 4, 5, 6].map((i) => (
-                        <CardSkeleton key={i} />
-                    ))}
+                    {/*{[1, 2, 3, 4, 5, 6].map((i) => (*/}
+                    {/*    <CardSkeleton key={i} />*/}
+                    {/*))}*/}
                 </div>
             ) : cards.length === 0 ? (
                 <div className="text-center py-16 bg-mesh rounded-xl border border-border">
@@ -257,6 +320,10 @@ export default function CardList({ filters }: CardListProps) {
                     ))}
                 </div>
             )}
+            {/* 페이지네이션 UI */}
+            <div className="flex justify-center mt-4 space-x-2">
+                {generatePaginationButtons()}
+            </div>
         </div>
     )
 }
