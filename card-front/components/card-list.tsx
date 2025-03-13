@@ -38,16 +38,10 @@ export default function CardList({ filters }: CardListProps) {
         switch (option) {
             case "under100k":
                 return 100000
-            case "100k-300k":
-                return 300000
-            case "300k-500k":
+            case "under500k":
                 return 500000
-            case "500k-700k":
-                return 700000
-            case "700k-1m":
+            case "under1m":
                 return 1000000
-            case "over1m":
-                return 1000001
             default:
                 return null
         }
@@ -59,10 +53,10 @@ export default function CardList({ filters }: CardListProps) {
                 return 0
             case "under10k":
                 return 10000
-            case "10k-30k":
+            case "under30k":
                 return 30000
-            case "over30k":
-                return 30001
+            case "under50k":
+                return 50000
             default:
                 return null
         }
@@ -154,12 +148,12 @@ export default function CardList({ filters }: CardListProps) {
     return (
         <div>
             <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-gradient">
-                    추천 카드
-                    <Badge variant="secondary" className="ml-2 text-sm font-normal">
+                <div className="flex items-center">
+                    <h2 className="text-2xl font-bold text-gradient">추천 카드</h2>
+                    <Badge className="ml-3 px-3 py-1 text-sm font-medium bg-primary text-white border-none">
                         {loading ? "검색 중..." : `${cards.length}개 찾음`}
                     </Badge>
-                </h2>
+                </div>
 
                 {filters.brands.length > 0 || filters.monthlySpend.length > 0 || filters.benefits.length > 0 ? (
                     <Button variant="ghost" size="sm" className="text-xs">
@@ -223,7 +217,7 @@ export default function CardList({ filters }: CardListProps) {
 
                                         <div className="absolute bottom-2 left-2 right-2 z-20 bg-black/40 backdrop-blur-sm text-white text-xs p-2 rounded-md">
                                             <div className="flex justify-between items-center">
-                                                <span>연회비: {card.record > 500000 ? "30,000원" : "10,000원"}</span>
+                                                <span>연회비: {"10,000원"}</span>
                                                 <span>포인트 적립률: {card.record > 800000 ? "1.5%" : "1.0%"}</span>
                                             </div>
                                         </div>

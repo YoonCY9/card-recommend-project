@@ -85,19 +85,19 @@ export default function CardRecommendationPage() {
 
   // 세분화된 월 사용액 필터
   const monthlySpendOptions = [
-    { value: "under100k", label: "10만원 미만" },
-    { value: "100k-300k", label: "10만원-30만원" },
-    { value: "300k-500k", label: "30만원-50만원" },
-    { value: "500k-700k", label: "50만원-70만원" },
-    { value: "700k-1m", label: "70만원-100만원" },
-    { value: "over1m", label: "100만원 이상" },
+    { value: "under100k", label: "10만원 이하" },
+
+    { value: "under500k", label: "50만원 이하" },
+
+    { value: "under1m", label: "100만원 이하" },
+
   ]
 
   const annualFeeOptions = [
     { value: "free", label: "무료" },
-    { value: "under10k", label: "1만원 미만" },
-    { value: "10k-30k", label: "1만원-3만원" },
-    { value: "over30k", label: "3만원 이상" },
+    { value: "under10k", label: "1만원 이하" },
+    { value: "under30k", label: "3만원 이하" },
+    { value: "under50k", label: "5만원 이하" },
   ]
 
   return (
