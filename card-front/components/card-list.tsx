@@ -281,9 +281,8 @@ export default function CardList({ filters }: CardListProps) {
                                         </div>
 
                                         <div className="absolute bottom-2 left-2 right-2 z-20 bg-black/40 backdrop-blur-sm text-white text-xs p-2 rounded-md">
-                                            <div className="flex justify-between items-center">
+                                            <div className="flex justify-between items-center ">
                                                 <span>연회비: {"10,000원"}</span>
-                                                <span>포인트 적립률: {card.record > 800000 ? "1.5%" : "1.0%"}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -295,7 +294,7 @@ export default function CardList({ filters }: CardListProps) {
                                                 주요 혜택
                                             </h4>
                                             <ul className="space-y-1.5">
-                                                {card.bnfContent.map((bnf, idx) => (
+                                                {card.bnfContent.slice(0, 2).map((bnf, idx) => (
                                                     <li key={idx} className="text-sm text-muted-foreground flex items-start">
                                                         <span className="mr-1.5 text-primary">•</span>
                                                         {bnf}
