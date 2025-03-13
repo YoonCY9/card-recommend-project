@@ -13,6 +13,10 @@ import java.util.NoSuchElementException;
 
 @Service
 public class CardService {
+  
+    private final CardRepository cardRepository;
+    private final CardQueryRepository cardQueryRepository;
+    private final CardBenefitRepository cardBenefitRepository;
 
     public CardService(CardRepository cardRepository, CardQueryRepository cardQueryRepository, CardBenefitRepository cardBenefitRepository) {
         this.cardRepository = cardRepository;
@@ -20,23 +24,19 @@ public class CardService {
         this.cardBenefitRepository = cardBenefitRepository;
     }
 
-    private final CardRepository cardRepository;
-    private final CardQueryRepository cardQueryRepository;
-    private final CardBenefitRepository cardBenefitRepository;
-
-
-
     public PageResponse findAll(List<String> cardBrand, Integer record, Integer fee, List<Category> benefit, Pageable pageable) {
 
         List<CardResponse> list = cardQueryRepository.findAll(cardBrand, record, fee, benefit, pageable)
                 .stream()
-                .map(c -> new CardResponse(
-                        c.getId(),
-                        c.getCardName(),
-                        c.getCardImg(),
-                        cardBenefitRepository.findByCardId_Id(c.getId()).stream().map(b -> b.getBnfContent()).toList(),
-                        c.getCardRecord()))
-                .toList();
+                 .map(c -> new CardResponse(
+                         c.getId(),
+                         c.getCardName(),
+                         c.getCardImg(),
+                         cardBenefitRepository.findByCardId_Id(c.getId()).stream().map(b -> b.getBnfContent()).toList(),
+                         c.getCardRecord(),
+                         c.getCardBrand()
+                        ))
+                 .toList();
 
         long totalCount = cardQueryRepository.countFiltered(cardBrand, record, fee, benefit);
         int totalPage=(int)Math.ceil((double)totalCount/ pageable.getPageSize());
@@ -47,7 +47,6 @@ public class CardService {
                 pageable.getPageSize(),
                 list
         );
-    }
 
 
     public CardDetailResponse findById(Long cardId) {
