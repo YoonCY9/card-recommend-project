@@ -2,6 +2,7 @@ package card_recommend_project.card_recommend_project;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+
 import java.util.List;
 
 @Entity
@@ -34,9 +35,37 @@ public class Card {
 
     private Integer cardRecord;
 
-//    @Enumerated(EnumType.STRING)
+    //    @Enumerated(EnumType.STRING)
     private List<String> cardOverseas;
 
     protected Card() {
+    }
+
+    public String getSafeDomesticOfferType() {
+        if (this.domesticOffer != null) {
+            return this.domesticOffer.getType().name();
+        }
+        return null;
+    }
+
+    public Integer getSafeDomesticOfferAmount() {
+        if (this.domesticOffer != null) {
+            return this.domesticOffer.getAmount();
+        }
+        return null;
+    }
+
+    public String getSafeOverseasOfferType() {
+        if (this.overseasOffer != null) {
+            return this.overseasOffer.getType().name();
+        }
+        return null;
+    }
+
+    public Integer getSafeOverseasOfferAmount() {
+        if (this.overseasOffer != null) {
+            return this.overseasOffer.getAmount();
+        }
+        return null;
     }
 }
