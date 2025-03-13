@@ -39,7 +39,7 @@ public class CardService {
                 .toList();
 
         long totalCount = cardQueryRepository.countFiltered(cardBrand, record, fee, benefit);
-        int totalPage = (int) Math.ceil((double) totalCount / pageable.getPageSize());
+        int totalPage = (int) Math.ceil((double) (totalCount - 1) / pageable.getPageSize()) + 1;
         return new PageResponse(
                 totalPage,
                 totalCount,
