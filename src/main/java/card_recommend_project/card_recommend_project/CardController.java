@@ -5,6 +5,7 @@ import card_recommend_project.card_recommend_project.dto.CardResponse;
 import card_recommend_project.card_recommend_project.dto.PageResponse;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,5 +36,11 @@ public class CardController {
     @GetMapping("/cards/{cardId}")
     public CardDetailResponse findById(@PathVariable Long cardId){
         return cardService.findById(cardId);
+    }
+
+    @GetMapping("/")
+    public String home(Authentication authentication) {
+        System.out.println(authentication.getName());
+        return "hello";
     }
 }
