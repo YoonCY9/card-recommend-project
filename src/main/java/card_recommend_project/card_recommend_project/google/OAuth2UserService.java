@@ -19,6 +19,9 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
         OAuth2Response oAuth2Response = null;
         if (id.equals("google")) {
             oAuth2Response = new GoogleResponse(user.getAttributes());
+            System.out.println(oAuth2Response.getName());
+            System.out.println(oAuth2Response.getEmail());
+            System.out.println(oAuth2Response.getPicture());
         } else return null;
 
         // 사용자를 특정할 아이디값 만들기

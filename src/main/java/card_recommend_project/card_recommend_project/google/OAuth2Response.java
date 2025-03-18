@@ -13,4 +13,6 @@ public interface OAuth2Response {
 
     //사용자 실명
     String getName();
+
+    String getPicture();
 }

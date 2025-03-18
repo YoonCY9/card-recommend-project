@@ -25,4 +25,9 @@ public record GoogleResponse(Map<String, Object> attribute) implements OAuth2Res
     public String getName() {
         return attribute.get("name").toString();
     }
+
+    @Override
+    public String getPicture() {
+        return attribute.get("picture").toString();
+    }
 }
