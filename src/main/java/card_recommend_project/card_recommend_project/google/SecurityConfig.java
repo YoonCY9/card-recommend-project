@@ -20,24 +20,22 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf((csrf) -> csrf.disable());
+                .csrf((csrf) -> csrf.disable())
 
-        http
-                .formLogin((login) -> login.disable());
+                .formLogin((login) -> login.disable())
 
-        http
-                .httpBasic((basic) -> basic.disable());
+                .httpBasic((basic) -> basic.disable())
 
-        http
                 .oauth2Login((oaut2) -> oaut2
-                        .userInfoEndpoint((userInfoEndpointConfig -> userInfoEndpointConfig
-                                .userService(userService))
-                        ));
+                        .userInfoEndpoint(userInfoEndpointConfig ->
+                                userInfoEndpointConfig.userService(userService))
+                                .successHandler(new CustomAuthenticationSuccessHandler())
+                        );
 
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/oauth2/**", "/login/**").permitAll()
-                        .anyRequest().authenticated());
+                        .anyRequest().permitAll() // 모든 요청 허용
+                );
 
         return http.build();
     }
