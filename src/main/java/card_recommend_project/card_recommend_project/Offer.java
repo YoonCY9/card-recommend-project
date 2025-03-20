@@ -14,6 +14,9 @@ public class Offer {
 
     private Integer amount;
 
+    public Offer() {
+    }
+
     public Offer(Card_In_Out type, Integer amount) {
         this.type = type;
         this.amount = amount;
