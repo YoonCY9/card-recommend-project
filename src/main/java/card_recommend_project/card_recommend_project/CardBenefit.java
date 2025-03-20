@@ -27,4 +27,10 @@ public class CardBenefit {
     protected CardBenefit() {
     }
 
+    public CardBenefit(Category bnfName, String bnfContent, String bnfDetail, Card cardId) {
+        this.bnfName = bnfName;
+        this.bnfContent = bnfContent;
+        this.bnfDetail = bnfDetail;
+        this.cardId = cardId;
+    }
 }
