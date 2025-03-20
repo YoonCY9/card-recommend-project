@@ -25,9 +25,9 @@ public class CardService {
         this.cardBenefitRepository = cardBenefitRepository;
     }
 
-    public PageResponse findAll(List<String> cardBrand, Integer record, Integer fee, List<Category> benefit, Pageable pageable) {
+    public PageResponse findAll(List<String> cardBrand, Integer record, Integer fee, List<Category> benefit, List<Long> cardId, Pageable pageable) {
 
-        List<CardResponse> list = cardQueryRepository.findAll(cardBrand, record, fee, benefit, pageable)
+        List<CardResponse> list = cardQueryRepository.findAll(cardBrand, record, fee, benefit, cardId, pageable)
                 .stream()
                 .map(c -> new CardResponse(
                         c.getId(),
@@ -39,7 +39,7 @@ public class CardService {
                 ))
                 .toList();
 
-        long totalCount = cardQueryRepository.countFiltered(cardBrand, record, fee, benefit);
+        long totalCount = cardQueryRepository.countFiltered(cardBrand, record, fee, benefit, cardId);
         int totalPage = (int) Math.ceil((double) (totalCount - 1) / pageable.getPageSize()) + 1;
         return new PageResponse(
                 totalPage,

@@ -4,7 +4,6 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
@@ -28,6 +27,7 @@ public class CardQueryRepository {
             Integer record,
             Integer fee,
             List<Category> benefit,
+            List<Long> cardId,
             Pageable pageable
     ) {
         return jpaQueryFactory
@@ -37,7 +37,8 @@ public class CardQueryRepository {
                         filterCardsBySpending(record),
                         cardBrand(cardBrands),
                         findByFee(fee),
-                        hasBenefitCategories(benefit)
+                        hasBenefitCategories(benefit),
+                        findByCardId(cardId)
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -58,7 +59,8 @@ public class CardQueryRepository {
             List<String> cardBrands,
             Integer record,
             Integer fee,
-            List<Category> benefit
+            List<Category> benefit,
+            List<Long> cardId
     ) {
         Long count = jpaQueryFactory
                 .select(card.count())
@@ -67,7 +69,8 @@ public class CardQueryRepository {
                         filterCardsBySpending(record),
                         cardBrand(cardBrands),
                         findByFee(fee),
-                        hasBenefitCategories(benefit)
+                        hasBenefitCategories(benefit),
+                        findByCardId(cardId)
                 )
                 .fetchOne();
         return count != null ? count : 0L;
@@ -113,6 +116,14 @@ public class CardQueryRepository {
             );
         }
         return condition;
+    }
+
+    private BooleanExpression findByCardId(List<Long> cardIds) {
+        if (cardIds == null || cardIds.isEmpty()) {
+            return null;
+        }
+
+        return card.id.in(cardIds);
     }
 
 }

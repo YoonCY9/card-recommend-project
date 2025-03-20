@@ -14,7 +14,7 @@ public class Offer {
 
     private Integer amount;
 
-    protected Offer() {
+    public Offer() {
     }
 
     public Offer(Card_In_Out type, Integer amount) {

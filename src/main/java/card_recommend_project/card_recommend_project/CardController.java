@@ -25,10 +25,11 @@ public class CardController {
                              @RequestParam(required = false) Integer record,
                              @RequestParam(required = false) Integer fee,
                              @RequestParam(required = false) List<Category> benefit,
+                             @RequestParam(required = false) List<Long> cardId,
                              @RequestParam(defaultValue = "1") int page,
                              @RequestParam(defaultValue = "8") int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
-        return cardService.findAll(cardBrand, record, fee, benefit, pageable);
+        return cardService.findAll(cardBrand, record, fee, benefit, cardId, pageable);
     }
 
     @GetMapping("/cards/{cardId}")
