@@ -41,6 +41,16 @@ public class Card {
     protected Card() {
     }
 
+    public Card(String cardName, String cardBrand, Offer domesticOffer, Offer overseasOffer, String cardImg, Integer cardRecord, List<String> cardOverseas) {
+        this.cardName = cardName;
+        this.cardBrand = cardBrand;
+        this.domesticOffer = domesticOffer;
+        this.overseasOffer = overseasOffer;
+        this.cardImg = cardImg;
+        this.cardRecord = cardRecord;
+        this.cardOverseas = cardOverseas;
+    }
+
     public String getSafeDomesticOfferType() {
         if (this.domesticOffer != null) {
             return this.domesticOffer.getType().name();

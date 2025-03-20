@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface CardBenefitRepository extends JpaRepository<CardBenefit, Long> {
     List<CardBenefit> findByCardId_Id(Long cardId);
+
+    void deleteByCardId(Card card);
 }

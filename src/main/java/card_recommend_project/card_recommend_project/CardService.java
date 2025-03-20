@@ -4,6 +4,7 @@ import card_recommend_project.card_recommend_project.dto.CardBenefitResponse;
 import card_recommend_project.card_recommend_project.dto.CardDetailResponse;
 import card_recommend_project.card_recommend_project.dto.CardResponse;
 import card_recommend_project.card_recommend_project.dto.PageResponse;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -73,5 +74,29 @@ public class CardService {
                 card.getCardRecord(),
                 card.getCardOverseas(),
                 cardBenefitResponses);
+    }
+
+    public CardResponse create(CreateCardRequest cardRequest) {
+        Card card = cardRepository.save(new Card(cardRequest.cardName(),
+                cardRequest.cardBrand(),
+                new Offer(cardRequest.Domestic(), cardRequest.domesticOfferAmount()),
+                new Offer(cardRequest.Overseas(), cardRequest.overseasAmount()),
+                cardRequest.cardImage(),
+                cardRequest.record(),
+                cardRequest.cardOverseas()));
+        return new CardResponse(card.getId(),
+                card.getCardName(),
+                card.getCardImg(),
+                null,
+                cardRequest.record(),
+                card.getCardBrand());
+    }
+
+    @Transactional
+    public void delete(Long cardId) {
+        Card card = cardRepository.findById(cardId).orElseThrow(
+                () -> new NoSuchElementException("해당하는 카드가 존재하지 않습니다."));
+        cardBenefitRepository.deleteByCardId(card);
+        cardRepository.delete(card);
     }
 }
