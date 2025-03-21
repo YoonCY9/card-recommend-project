@@ -8,7 +8,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -25,9 +24,9 @@ public class CardService {
         this.cardBenefitRepository = cardBenefitRepository;
     }
 
-    public PageResponse findAll(List<String> cardBrand, Integer record, Integer fee, List<Category> benefit, List<Long> cardId, Pageable pageable) {
+    public PageResponse findAll(List<String> cardBrand, Integer record, Integer fee, List<Category> benefit, List<Long> cardId, Pageable pageable, String keyward) {
 
-        List<CardResponse> list = cardQueryRepository.findAll(cardBrand, record, fee, benefit, cardId, pageable)
+        List<CardResponse> list = cardQueryRepository.findAll(cardBrand, record, fee, benefit, cardId, pageable, keyward)
                 .stream()
                 .map(c -> new CardResponse(
                         c.getId(),

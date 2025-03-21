@@ -16,7 +16,6 @@ import {
   Landmark,
   Smartphone,
   Radio,
-  Search,
   Sparkles,
   Filter,
 } from "lucide-react"
@@ -29,9 +28,18 @@ export default function CardRecommendationPage() {
     brands: [] as string[],
     monthlySpend: [] as string[],
     annualFee: [] as string[],
+    keyward: ""
   })
 
-  const handleFilterToggle = (category: keyof typeof filters, value: string) => {
+  type FilterCategory =
+      | "benefits"
+      | "brands"
+      | "monthlySpend"
+      | "annualFee";
+
+
+  const handleFilterToggle = (
+      category: FilterCategory, value: string) => {
     setFilters((prev) => {
       if (prev[category].includes(value)) {
         return {
@@ -69,18 +77,18 @@ export default function CardRecommendationPage() {
 
   // 확장된 카드 브랜드 목록
   const brandOptions = [
-    { value: "신한카드", label: "신한카드" },
-    { value: "삼성카드", label: "삼성카드" },
-    { value: "현대카드", label: "현대카드" },
-    { value: "KB국민카드", label: "KB국민카드" },
-    { value: "우리카드", label: "우리카드" },
-    { value: "롯데카드", label: "롯데카드" },
-    { value: "NH농협카드", label: "NH농협카드" },
-    { value: "하나카드", label: "하나카드" },
-    { value: "BC카드", label: "BC카드" },
-    { value: "씨티카드", label: "씨티카드" },
-    { value: "카카오뱅크", label: "카카오뱅크" },
-    { value: "토스뱅크", label: "토스뱅크" },
+    { value: "신한", label: "신한카드" },
+    { value: "삼성", label: "삼성카드" },
+    { value: "현대", label: "현대카드" },
+    { value: "KB", label: "KB국민카드" },
+    { value: "우리", label: "우리카드" },
+    { value: "롯데", label: "롯데카드" },
+    { value: "NH", label: "NH농협카드" },
+    { value: "하나", label: "하나카드" },
+    { value: "BC", label: "BC카드" },
+    { value: "씨티", label: "씨티카드" },
+    { value: "카카오", label: "카카오뱅크" },
+    { value: "토스", label: "토스뱅크" },
   ]
 
   // 세분화된 월 사용액 필터
@@ -204,15 +212,27 @@ export default function CardRecommendationPage() {
                             brands: [],
                             monthlySpend: [],
                             annualFee: [],
+                            keyward: ""
                           })
                       }
                   >
                     필터 초기화
                   </Button>
-                  <Button size="sm" className="bg-black hover:bg-black/90 text-white">
-                    <Search className="h-4 w-4 mr-2" />
-                    검색하기
-                  </Button>
+                  <div className="space-y-3">
+                    <Label className="text-sm font-medium flex items-center gap-2">
+                    </Label>
+                    <div className="flex items-center gap-2">
+                      <input
+                          type="text"
+                          placeholder="카드명 검색"
+                          value={filters.keyward}
+                          onChange={(e) =>
+                              setFilters(prev => ({ ...prev, keyward: e.target.value }))
+                          }
+                          className="flex-grow border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             </CardContent>

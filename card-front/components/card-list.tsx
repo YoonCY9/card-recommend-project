@@ -20,7 +20,7 @@ interface CardResponse {
     domesticOfferAmount: string
     overseasOfferAmount: string
     bnfDetail?: string
-    totalCount:number
+    totalCount: number
 }
 
 // 페이지 응답 타입 추가
@@ -38,6 +38,7 @@ interface CardListProps {
         brands: string[]
         monthlySpend: string[]
         annualFee: string[]
+        keyward: string
     }
 }
 
@@ -47,7 +48,7 @@ export default function CardList({ filters }: CardListProps) {
     const [error, setError] = useState<string | null>(null)
     const [currentPage, setCurrentPage] = useState(1)
     const [totalPages, setTotalPages] = useState(1)
-    const [totalCount, setTotalCount] = useState(0);
+    const [totalCount, setTotalCount] = useState(0)
 
 
     const mapMonthlySpendToRecord = (option: string): number | null => {
@@ -113,6 +114,9 @@ export default function CardList({ filters }: CardListProps) {
             if (filters.benefits.length > 0) {
                 filters.benefits.forEach((benefit) => params.append("benefit", benefit))
             }
+            if (filters.keyward && filters.keyward.trim() !== "") {
+                params.append("keyward", filters.keyward.trim())
+            }
 
             // 페이지 파라미터 추가 (페이지는 0부터 시작하는 경우 -1 처리)
             params.append("page", currentPage.toString())
@@ -154,7 +158,7 @@ export default function CardList({ filters }: CardListProps) {
         const displayPage = currentPage
 
         let startPage = Math.max(1, displayPage - Math.floor(maxVisibleButtons / 2))
-        let endPage = Math.min(totalPages, startPage + maxVisibleButtons - 1)
+        const endPage = Math.min(totalPages, startPage + maxVisibleButtons - 1)
 
         if (endPage - startPage + 1 < maxVisibleButtons) {
             startPage = Math.max(1, endPage - maxVisibleButtons + 1)
@@ -220,12 +224,6 @@ export default function CardList({ filters }: CardListProps) {
                     </Badge>
 
                 </div>
-
-                {filters.brands.length > 0 || filters.monthlySpend.length > 0 || filters.benefits.length > 0 ? (
-                    <Button variant="ghost" size="sm" className="text-xs">
-                        필터 초기화
-                    </Button>
-                ) : null}
             </div>
 
             {loading ? (

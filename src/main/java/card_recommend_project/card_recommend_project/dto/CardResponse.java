@@ -12,7 +12,6 @@ public record CardResponse(
         List<String> bnfContent,
         int record,
         String brand
-
 ) {
 
 }

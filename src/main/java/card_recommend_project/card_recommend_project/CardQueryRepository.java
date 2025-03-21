@@ -28,7 +28,8 @@ public class CardQueryRepository {
             Integer fee,
             List<Category> benefit,
             List<Long> cardId,
-            Pageable pageable
+            Pageable pageable,
+            String keyward
     ) {
         return jpaQueryFactory
                 .selectFrom(card)
@@ -38,7 +39,8 @@ public class CardQueryRepository {
                         cardBrand(cardBrands),
                         findByFee(fee),
                         hasBenefitCategories(benefit),
-                        findByCardId(cardId)
+                        findByCardId(cardId),
+                        findByKeyWard(keyward)
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -96,7 +98,12 @@ public class CardQueryRepository {
         if (cardBrands == null) {
             return null;
         }
-        return card.cardBrand.in(cardBrands);
+        BooleanExpression expression = null;
+        for (String brand : cardBrands) {
+            BooleanExpression likeExpression = card.cardBrand.containsIgnoreCase(brand);
+            expression = (expression == null) ? likeExpression : expression.or(likeExpression);
+        }
+        return expression;
     }
 
     private BooleanExpression hasBenefitCategories(List<Category> benefit) {
@@ -124,6 +131,14 @@ public class CardQueryRepository {
         }
 
         return card.id.in(cardIds);
+    }
+
+    // 카드제목으로 검색하기
+    private BooleanExpression findByKeyWard(String keyWard) {
+        if (keyWard == null) {
+            return null;
+        }
+        return card.cardName.contains(keyWard);
     }
 
 }
