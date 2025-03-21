@@ -23,11 +23,11 @@ export default function CreateCardPage() {
         cardBrand: "",
         cardName: "",
         domesticOffer: {
-            type: null,  // "Domestic" 또는 null
+            type: "",  // "Domestic" 또는 null
             amount: 0,   // 숫자 값
         },
         overseasOffer: {
-            type: null,  // "Overseas" 또는 null
+            type: "",  // "Overseas" 또는 null
             amount: 0,   // 숫자 값
         },
         cardImage: "",
@@ -56,42 +56,19 @@ export default function CreateCardPage() {
 
         setCard((prev) => {
             if (name === "domesticOfferAmount") {
-                return {
-                    ...prev,
-                    domesticOffer: {
-                        ...prev.domesticOffer,
-                        amount: Number(value),
-                    },
-                };
+                return { ...prev, domesticOffer: { ...prev.domesticOffer, amount: value ? Number(value) : 0 } };
             } else if (name === "overseasOfferAmount") {
-                return {
-                    ...prev,
-                    overseasOffer: {
-                        ...prev.overseasOffer,
-                        amount: Number(value),
-                    },
-                };
+                return { ...prev, overseasOffer: { ...prev.overseasOffer, amount: value ? Number(value) : 0 } };
             } else if (name === "Domestic") {
-                return {
-                    ...prev,
-                    domesticOffer: {
-                        ...prev.domesticOffer,
-                        type: value === "true" ? "Domestic" : null, // ✅ "Domestic" 또는 null
-                    },
-                };
+                return { ...prev, domesticOffer: { ...prev.domesticOffer, type: value } };  // ✅ "Domestic" 또는 ""
             } else if (name === "Overseas") {
-                return {
-                    ...prev,
-                    overseasOffer: {
-                        ...prev.overseasOffer,
-                        type: value === "true" ? "Overseas" : null, // ✅ "Overseas" 또는 null
-                    },
-                };
+                return { ...prev, overseasOffer: { ...prev.overseasOffer, type: value } };  // ✅ "Overseas" 또는 ""
+            } else if (name === "record") {
+                return { ...prev, record: value ? Number(value) : 0 };  // ✅ 0으로 대체
             }
             return { ...prev, [name]: value };
         });
     };
-
     // 🔹 배열 입력 변경 (해외 사용 브랜드)
     const handleArrayChange = (index: number, value: string) => {
         const newCardOverseas = [...card.cardOverseas];
@@ -125,6 +102,20 @@ export default function CreateCardPage() {
             router.push("/login");
             return;
         }
+        const cleanCardData = (card) => {
+            const cleanedCard = JSON.parse(JSON.stringify(card, (key, value) => {
+                if (value === null || value === "" || (Array.isArray(value) && value.length === 0)) {
+                    return undefined;
+                }
+                return value;
+            }));
+            return cleanedCard;
+        };
+        // ✅ 불필요한 `null` 값 제거
+        const cleanedCard = cleanCardData(card);
+
+        // 🔥 요청 전에 최종 데이터 확인 로그 추가
+        console.log("🚀 최종 전송 데이터:", JSON.stringify(cleanedCard, null, 2));
 
         try {
             // 1️⃣ 카드 생성 요청
@@ -135,7 +126,8 @@ export default function CreateCardPage() {
                     Authorization: `Bearer ${token}`, // 🔥 토큰 추가
                 },
                 credentials: "include",
-                body: JSON.stringify(card),
+                body: JSON.stringify(cleanedCard),
+
             });
 
             if (!cardResponse.ok) throw new Error("카드 생성 실패");
@@ -179,17 +171,17 @@ export default function CreateCardPage() {
                 <input type="text" name="cardName" placeholder="카드 이름" value={card.cardName} onChange={handleChange} className="w-full p-2 border rounded" />
 
                 {/* 국내 사용 여부 (ENUM) */}
-                <select name="Domestic" value={String(card.domesticOffer.type)} onChange={handleChange} className="w-full p-2 border rounded">
-                    <option value="true">국내 사용 가능</option>
-                    <option value="false">국내 사용 불가</option>
+                <select name="Domestic" value={card.domesticOffer.type} onChange={handleChange} className="w-full p-2 border rounded">
+                    <option value="Domestic">국내 사용 가능</option>
+                    <option value="">국내 사용 불가</option>
                 </select>
 
                 <input type="number" name="domesticOfferAmount" placeholder="국내 혜택 금액" value={card.domesticOffer.amount} onChange={handleChange} className="w-full p-2 border rounded" />
 
                 {/* 해외 사용 여부 (ENUM) */}
-                <select name="Overseas" value={String(card.overseasOffer.type)} onChange={handleChange} className="w-full p-2 border rounded">
-                    <option value="true">해외 사용 가능</option>
-                    <option value="false">해외 사용 불가</option>
+                <select name="Overseas" value={card.overseasOffer.type} onChange={handleChange} className="w-full p-2 border rounded">
+                    <option value="Overseas">해외 사용 가능</option>
+                    <option value="">해외 사용 불가</option>
                 </select>
 
                 <input type="number" name="overseasOfferAmount" placeholder="해외 혜택 금액" value={card.overseasOffer.amount} onChange={handleChange} className="w-full p-2 border rounded" />
