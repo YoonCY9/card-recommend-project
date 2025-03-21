@@ -5,13 +5,31 @@ import { useRouter } from "next/navigation";
 
 export default function CreateCardPage() {
     const router = useRouter();
+
+    const benefitOptions = [
+        { value: "SHOPPING_RETAIL", label: "쇼핑/유통" },
+        { value: "FOOD_BEVERAGE", label: "식음료" },
+        { value: "TRANSPORT_AUTOMOBILE", label: "교통/자동차" },
+        { value: "TRAVEL_AIRLINE", label: "여행/항공" },
+        { value: "CULTURE_LEISURE", label: "문화/레저" },
+        { value: "LIVING_SERVICES", label: "생활서비스" },
+        { value: "EDUCATION_CHILDCARE", label: "교육/육아" },
+        { value: "FINANCIAL_SERVICES", label: "금융서비스" },
+        { value: "DIGITAL_SERVICES", label: "디지털서비스" },
+        { value: "TELECOM_MISC", label: "통신/기타" },
+    ];
+
     const [card, setCard] = useState({
         cardBrand: "",
         cardName: "",
-        Domestic: false,
-        domesticOfferAmount: 0,
-        Overseas: false,
-        overseasAmount: 0,
+        domesticOffer: {
+            type: null,  // "Domestic" 또는 null
+            amount: 0,   // 숫자 값
+        },
+        overseasOffer: {
+            type: null,  // "Overseas" 또는 null
+            amount: 0,   // 숫자 값
+        },
         cardImage: "",
         record: 0,
         cardOverseas: [""], // 해외 사용 브랜드 배열
@@ -35,14 +53,43 @@ export default function CreateCardPage() {
     // 🔹 카드 입력 변경
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        setCard((prev) => ({
-            ...prev,
-            [name]: name === "domesticOfferAmount" || name === "overseasAmount" || name === "record"
-                ? Number(value)  // 숫자 값 변환
-                : name === "Domestic" || name === "Overseas"
-                    ? value === "true" // Boolean 변환
-                    : value,
-        }));
+
+        setCard((prev) => {
+            if (name === "domesticOfferAmount") {
+                return {
+                    ...prev,
+                    domesticOffer: {
+                        ...prev.domesticOffer,
+                        amount: Number(value),
+                    },
+                };
+            } else if (name === "overseasOfferAmount") {
+                return {
+                    ...prev,
+                    overseasOffer: {
+                        ...prev.overseasOffer,
+                        amount: Number(value),
+                    },
+                };
+            } else if (name === "Domestic") {
+                return {
+                    ...prev,
+                    domesticOffer: {
+                        ...prev.domesticOffer,
+                        type: value === "true" ? "Domestic" : null, // ✅ "Domestic" 또는 null
+                    },
+                };
+            } else if (name === "Overseas") {
+                return {
+                    ...prev,
+                    overseasOffer: {
+                        ...prev.overseasOffer,
+                        type: value === "true" ? "Overseas" : null, // ✅ "Overseas" 또는 null
+                    },
+                };
+            }
+            return { ...prev, [name]: value };
+        });
     };
 
     // 🔹 배열 입력 변경 (해외 사용 브랜드)
@@ -58,16 +105,21 @@ export default function CreateCardPage() {
     };
 
     // 🔹 혜택 입력 변경
-    const handleBenefitChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleBenefitChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
         const { name, value } = e.target;
         setBenefit((prev) => ({ ...prev, [name]: value }));
     };
-
     // 🔹 카드 및 혜택 생성 요청
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        const token = localStorage.getItem("accessToken");
+        // 🔥 쿠키에서 accessToken 가져오기
+        const getCookie = (name: string) => {
+            const cookies = document.cookie.split('; ');
+            const found = cookies.find((cookie) => cookie.startsWith(`${name}=`));
+            return found ? found.split('=')[1] : null;
+        };
+        const token = getCookie('accessToken');
         if (!token) {
             alert("로그인이 필요합니다.");
             router.push("/login");
@@ -82,24 +134,27 @@ export default function CreateCardPage() {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`, // 🔥 토큰 추가
                 },
+                credentials: "include",
                 body: JSON.stringify(card),
             });
 
             if (!cardResponse.ok) throw new Error("카드 생성 실패");
 
             const createdCard = await cardResponse.json();
-            console.log("✅ 생성된 카드:", createdCard);
+
 
             // 2️⃣ 생성된 카드의 ID로 혜택 생성 요청
             const benefitResponse = await fetch("http://localhost:8080/cardbenefit", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
+                    "Authorization": `Bearer ${token}`,
                 },
+                credentials: "include",
                 body: JSON.stringify({
                     ...benefit,
-                    cardId: createdCard.id, // 카드 ID를 혜택 데이터에 추가
+                    bnfName: benefit.bnfName.toUpperCase(), // ✅ Enum 값 변환
+                    cardId: createdCard.id,  // ✅ 카드 ID만 전달 (Card 객체 아님)
                 }),
             });
 
@@ -123,21 +178,21 @@ export default function CreateCardPage() {
                 <input type="text" name="cardBrand" placeholder="카드 브랜드" value={card.cardBrand} onChange={handleChange} className="w-full p-2 border rounded" />
                 <input type="text" name="cardName" placeholder="카드 이름" value={card.cardName} onChange={handleChange} className="w-full p-2 border rounded" />
 
-                {/* 국내 사용 여부 (Boolean) */}
-                <select name="Domestic" value={String(card.Domestic)} onChange={handleChange} className="w-full p-2 border rounded">
+                {/* 국내 사용 여부 (ENUM) */}
+                <select name="Domestic" value={String(card.domesticOffer.type)} onChange={handleChange} className="w-full p-2 border rounded">
                     <option value="true">국내 사용 가능</option>
                     <option value="false">국내 사용 불가</option>
                 </select>
 
-                <input type="number" name="domesticOfferAmount" placeholder="국내 혜택 금액" value={card.domesticOfferAmount} onChange={handleChange} className="w-full p-2 border rounded" />
+                <input type="number" name="domesticOfferAmount" placeholder="국내 혜택 금액" value={card.domesticOffer.amount} onChange={handleChange} className="w-full p-2 border rounded" />
 
-                {/* 해외 사용 여부 (Boolean) */}
-                <select name="Overseas" value={String(card.Overseas)} onChange={handleChange} className="w-full p-2 border rounded">
+                {/* 해외 사용 여부 (ENUM) */}
+                <select name="Overseas" value={String(card.overseasOffer.type)} onChange={handleChange} className="w-full p-2 border rounded">
                     <option value="true">해외 사용 가능</option>
                     <option value="false">해외 사용 불가</option>
                 </select>
 
-                <input type="number" name="overseasAmount" placeholder="해외 혜택 금액" value={card.overseasAmount} onChange={handleChange} className="w-full p-2 border rounded" />
+                <input type="number" name="overseasOfferAmount" placeholder="해외 혜택 금액" value={card.overseasOffer.amount} onChange={handleChange} className="w-full p-2 border rounded" />
                 <input type="text" name="cardImage" placeholder="카드 이미지 URL" value={card.cardImage} onChange={handleChange} className="w-full p-2 border rounded" />
                 <input type="number" name="record" placeholder="전월 실적" value={card.record} onChange={handleChange} className="w-full p-2 border rounded" />
 
@@ -148,7 +203,13 @@ export default function CreateCardPage() {
                 <button type="button" onClick={addOverseasBrand} className="w-full bg-gray-300 py-2 rounded">해외 브랜드 추가</button>
 
                 {/* 혜택 입력 */}
-                <input type="text" name="bnfName" placeholder="혜택 이름" value={benefit.bnfName} onChange={handleBenefitChange} className="w-full p-2 border rounded" />
+                {/* ✅ 혜택 이름 선택을 드롭다운으로 변경 */}
+                <select name="bnfName" value={benefit.bnfName} onChange={handleBenefitChange} className="w-full p-2 border rounded">
+                    <option value="">혜택 카테고리 선택</option>
+                    {benefitOptions.map((option) => (
+                        <option key={option.value} value={option.value}>{option.label}</option>
+                    ))}
+                </select>
                 <input type="text" name="bnfContent" placeholder="혜택 내용" value={benefit.bnfContent} onChange={handleBenefitChange} className="w-full p-2 border rounded" />
                 <input type="text" name="bnfDetail" placeholder="혜택 상세" value={benefit.bnfDetail} onChange={handleBenefitChange} className="w-full p-2 border rounded" />
 
