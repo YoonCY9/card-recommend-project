@@ -26,13 +26,20 @@ export default function AdminLogin() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
+                // 백엔드에서 별도로 쿠키를 발급하지 않으므로 credentials는 선택사항입니다.
+                credentials: 'include',
                 body: JSON.stringify(formData),
             });
             if (!response.ok) {
                 throw new Error('로그인 실패');
             }
             const data = await response.json();
-            localStorage.setItem('accessToken', data.accessToken);
+            // data.token에 백엔드에서 받은 토큰이 있다고 가정 (AccessToken record)
+            // 쿠키 만료일을 1일 후로 설정
+            const expires = new Date();
+            expires.setTime(expires.getTime() + 24 * 60 * 60 * 1000);
+            document.cookie = `accessToken=${data.token}; expires=${expires.toUTCString()}; path=/`;
+
             router.push('/admin/dashboard');
         } catch (err: any) {
             setError(err.message);
