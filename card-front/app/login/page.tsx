@@ -40,7 +40,7 @@ export default function AdminLogin() {
             expires.setTime(expires.getTime() + 24 * 60 * 60 * 1000);
             document.cookie = `accessToken=${data.token}; expires=${expires.toUTCString()}; path=/`;
 
-            router.push('/admin/dashboard');
+            router.push('/');
         } catch (err: any) {
             setError(err.message);
         }

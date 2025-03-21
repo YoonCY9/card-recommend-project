@@ -22,15 +22,15 @@ public class CardBenefit {
 
     @ManyToOne
     @JoinColumn(name = "card_id")
-    private Card card;
+    private Card cardId;
 
     protected CardBenefit() {
     }
 
-    public CardBenefit(Category bnfName, String bnfContent, String bnfDetail, Card card) {
+    public CardBenefit(Category bnfName, String bnfContent, String bnfDetail, Card cardId) {
         this.bnfName = bnfName;
         this.bnfContent = bnfContent;
         this.bnfDetail = bnfDetail;
-        this.card = card;
+        this.cardId = cardId;
     }
 }
