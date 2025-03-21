@@ -27,20 +27,15 @@ public class CardController {
                              @RequestParam(required = false) List<Category> benefit,
                              @RequestParam(required = false) List<Long> cardId,
                              @RequestParam(defaultValue = "1") int page,
-                             @RequestParam(defaultValue = "8") int size) {
+                             @RequestParam(defaultValue = "8") int size,
+                             @RequestParam(required = false) String keyward) {
         Pageable pageable = PageRequest.of(page - 1, size);
-        return cardService.findAll(cardBrand, record, fee, benefit, cardId, pageable);
+        return cardService.findAll(cardBrand, record, fee, benefit, cardId, pageable,keyward);
     }
 
     @GetMapping("/cards/{cardId}")
     public CardDetailResponse findById(@PathVariable Long cardId) {
         return cardService.findById(cardId);
-    }
-
-    @GetMapping("/")
-    public String home(Authentication authentication) {
-        System.out.println(authentication.getName());
-        return "hello";
     }
 
     @PostMapping("/cards")
