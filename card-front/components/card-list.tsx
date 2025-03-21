@@ -249,7 +249,7 @@ export default function CardList({ filters }: CardListProps) {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     {cards.map((card) => (
                         <div key={card.id} className="transition-all duration-300 opacity-100">
-                            <Card className="group h-full overflow-hidden hover:shadow-lg transition-all duration-300 border-border hover:border-primary/20 card-shine card-3d flex flex-col">
+                            <Card className="flex flex-col hover:shadow-lg h-full group card-3d transition-all duration-300">
                                 <CardHeader className="pb-2">
                                     <div className="flex justify-between items-start">
                                         <Badge className={`${getCardBrandColor(card.brand)} px-2 py-0.5 text-xs font-medium`}>
@@ -305,10 +305,10 @@ export default function CardList({ filters }: CardListProps) {
                                 </CardContent>
                                 <CardFooter className="pt-4 mt-auto">
                                     <Link href={`/cards/${card.id}`} className="w-full">
-                                    <Button className="w-full bg-black hover:bg-black/90 text-white transition-colors">
-                                        <span>상세 정보</span>
-                                        <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                                    </Button>
+                                        <Button className="w-full bg-black hover:bg-black/90 text-white transition-colors">
+                                            <span>상세 정보</span>
+                                            <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                                        </Button>
                                     </Link>
                                 </CardFooter>
                             </Card>
