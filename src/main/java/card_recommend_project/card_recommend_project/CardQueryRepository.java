@@ -98,7 +98,12 @@ public class CardQueryRepository {
         if (cardBrands == null) {
             return null;
         }
-        return card.cardBrand.in(cardBrands);
+        BooleanExpression expression = null;
+        for (String brand : cardBrands) {
+            BooleanExpression likeExpression = card.cardBrand.containsIgnoreCase(brand);
+            expression = (expression == null) ? likeExpression : expression.or(likeExpression);
+        }
+        return expression;
     }
 
     private BooleanExpression hasBenefitCategories(List<Category> benefit) {
