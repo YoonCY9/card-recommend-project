@@ -62,7 +62,7 @@ export default function CardRecommendationPage() {
     })
   }
 
-  const benefitOptions = [
+const benefitOptions = [
     { value: "SHOPPING_RETAIL", label: "쇼핑/유통", icon: <ShoppingBag className="h-4 w-4" /> },
     { value: "FOOD_BEVERAGE", label: "식음료", icon: <Utensils className="h-4 w-4" /> },
     { value: "TRANSPORT_AUTOMOBILE", label: "교통/자동차", icon: <Car className="h-4 w-4" /> },
@@ -73,7 +73,7 @@ export default function CardRecommendationPage() {
     { value: "FINANCIAL_SERVICES", label: "금융서비스", icon: <Landmark className="h-4 w-4" /> },
     { value: "DIGITAL_SERVICES", label: "디지털서비스", icon: <Smartphone className="h-4 w-4" /> },
     { value: "TELECOM_MISC", label: "통신/기타", icon: <Radio className="h-4 w-4" /> },
-  ]
+  ];
 
   // 확장된 카드 브랜드 목록
   const brandOptions = [
