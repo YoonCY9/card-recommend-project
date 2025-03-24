@@ -53,19 +53,20 @@ export default function CreateCardPage() {
     // 카드 입력값 변경
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
+
         setCard((prev) => {
             if (name === "domesticOfferAmount") {
-                return { ...prev, domesticOffer: { ...prev.domesticOffer, amount: value ? Number(value) : 0 } };
+                return { ...prev, domesticOffer: { ...prev.domesticOffer, amount: value ? Number(value) : null } };
             } else if (name === "overseasOfferAmount") {
-                return { ...prev, overseasOffer: { ...prev.overseasOffer, amount: value ? Number(value) : 0 } };
+                return { ...prev, overseasOffer: { ...prev.overseasOffer, amount: value ? Number(value) : null } };
             } else if (name === "Domestic") {
-                return { ...prev, domesticOffer: { ...prev.domesticOffer, type: value } };
+                return { ...prev, domesticOffer: { ...prev.domesticOffer, type: value || null } }; // 빈값이면 null
             } else if (name === "Overseas") {
-                return { ...prev, overseasOffer: { ...prev.overseasOffer, type: value } };
+                return { ...prev, overseasOffer: { ...prev.overseasOffer, type: value || null } }; // 빈값이면 null
             } else if (name === "record") {
-                return { ...prev, record: value ? Number(value) : 0 };
+                return { ...prev, record: value ? Number(value) : null };
             }
-            return { ...prev, [name]: value };
+            return { ...prev, [name]: value || null }; // 빈값이면 null
         });
     };
 
@@ -155,6 +156,8 @@ export default function CreateCardPage() {
             const createdBenefit = await benefitResponse.json();
             console.log("카드 및 혜택 생성 완료!", createdBenefit);
             alert("카드 및 혜택 생성 성공!");
+            // ✅ 생성된 카드의 ID를 이용해 상세 페이지로 이동
+            router.push(`/cards/${createdCard.id}`);
         } catch (error) {
             console.error(error);
             alert("생성 실패");
