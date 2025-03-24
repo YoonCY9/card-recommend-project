@@ -39,10 +39,11 @@ interface CardListProps {
         monthlySpend: string[]
         annualFee: string[]
         keyward: string
-    }
+    };
+    isAuthenticated: boolean;
 }
 
-export default function CardList({ filters }: CardListProps) {
+export default function CardList({ filters, isAuthenticated }: CardListProps) {
     const [cards, setCards] = useState<CardResponse[]>([])
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
@@ -332,11 +333,13 @@ export default function CardList({ filters }: CardListProps) {
                                             <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                                         </Button>
                                     </Link>
+                                    {/* 🔥 isAuthenticated가 false이면 삭제 버튼 비활성화 */}
                                     <Button
-                                        className="w-full bg-red-600 hover:bg-red-700 text-white transition-colors"
-                                        onClick={() => handleDelete(card.id)}>
-                                        <span>삭제</span>
-                                        <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                                        className="w-full bg-red-600 hover:bg-red-700 text-white"
+                                        onClick={() => handleDelete(card.id)}
+                                        disabled={!isAuthenticated} // 로그인 안 하면 비활성화
+                                    >
+                                        삭제
                                     </Button>
                                 </CardFooter>
                             </Card>

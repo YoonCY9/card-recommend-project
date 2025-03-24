@@ -1,9 +1,10 @@
 "use client"
 
-import { useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import CardList from "./card-list-admin"
+import { useEffect, useState } from "react";
+
 import {
     CreditCard,
     ShoppingBag,
@@ -22,15 +23,37 @@ import {
 import FilterOption from "@/components/filter-option"
 import { Button } from "@/components/ui/button"
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function CardRecommendationPage() {
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
     const [filters, setFilters] = useState({
         benefits: [] as string[],
         brands: [] as string[],
         monthlySpend: [] as string[],
         annualFee: [] as string[],
-        keyward: ""
-    })
+        keyward: "",
+    });
+    const router = useRouter();
+
+    useEffect(() => {
+        const getCookie = (name: string) => {
+            const cookies = document.cookie.split("; ");
+            const found = cookies.find((cookie) => cookie.startsWith(`${name}=`));
+            return found ? found.split("=")[1] : null;
+        };
+
+        const token = getCookie("accessToken");
+
+
+        if (!token) {
+            router.replace("/main"); // ✅ 인증 없으면 메인으로 리다이렉트
+        } else {
+            setIsAuthenticated(true);
+        }
+    }, [router]);
+
+    if (isAuthenticated === null) return null; //
 
     type FilterCategory =
         | "benefits"
@@ -209,12 +232,12 @@ export default function CardRecommendationPage() {
                             <div className="flex justify-end gap-4 pt-2">
                                 <div>
                                     <Link href="/cards/add">
-                                    <Button variant="outline"
-                                            size="sm"
-                                            className="px-4 py-2 text-sm bg-green-600 text-white rounded-md hover:bg-blue-700 transition-colors">
-                                        카드 생성
-                                    </Button>
-                                </Link>
+                                        <Button variant="outline"
+                                                size="sm"
+                                                className="px-4 py-2 text-sm bg-green-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+                                            카드 생성
+                                        </Button>
+                                    </Link>
                                 </div>
 
                                 {/* 필터 초기화 버튼 */}
@@ -244,19 +267,18 @@ export default function CardRecommendationPage() {
                                         value={filters.keyward}
                                         onChange={(e) =>
                                             setFilters((prev) => ({ ...prev, keyward: e.target.value }))
-                                    }
+                                        }
                                         className="flex-grow border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary text-sm"
-                                        />
-                                    </div>
+                                    />
                                 </div>
                             </div>
+                        </div>
 
                     </CardContent>
                 </Card>
 
-                <CardList filters={filters} />
+                <CardList filters={filters} isAuthenticated={isAuthenticated} />
             </div>
         </main>
     )
 }
-
