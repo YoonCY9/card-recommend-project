@@ -21,7 +21,7 @@ public class CardBenefitService {
     public CardBenefitResponse create(CardBenefitRequest request) {
         Card card = cardRepository.findById(request.cardId()).orElseThrow(
                 () -> new NoSuchElementException("해당하는 카드가 없습니다."));
-        CardBenefit cardBenefit = new CardBenefit(request.bnfName(), request.bnfContent(), request.bnfDetail(), card);
+        CardBenefit cardBenefit = cardBenefitRepository.save(new CardBenefit(request.bnfName(), request.bnfContent(), request.bnfDetail(), card));
         return new CardBenefitResponse(
                 cardBenefit.getBnfName(),
                 cardBenefit.getBnfContent(),
