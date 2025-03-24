@@ -45,18 +45,15 @@ export default function CardRecommendationPage() {
 
         const token = getCookie("accessToken");
 
+
         if (!token) {
-            router.replace("/"); // ✅ 인증 없으면 메인으로 리다이렉트
+            router.replace("/main"); // ✅ 인증 없으면 메인으로 리다이렉트
         } else {
             setIsAuthenticated(true);
         }
     }, [router]);
 
-    if (isAuthenticated === null) return null; // ✅ 인증 확인 전에는 빈 화면 유지
-
-    if (isAuthenticated === null) {
-        return null; // ✅ 인증 체크 중이면 빈 화면 유지
-    }
+    if (isAuthenticated === null) return null; //
 
     type FilterCategory =
         | "benefits"
@@ -280,7 +277,7 @@ export default function CardRecommendationPage() {
                     </CardContent>
                 </Card>
 
-                <CardList filters={filters} />
+                <CardList filters={filters} isAuthenticated={isAuthenticated} />
             </div>
         </main>
     )
