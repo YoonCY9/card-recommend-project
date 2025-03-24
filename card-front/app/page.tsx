@@ -1,5 +1,6 @@
 "use client"
 
+import Link from 'next/link';
 import { useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
@@ -110,10 +111,17 @@ const benefitOptions = [
 
   return (
       <main className="min-h-screen bg-mesh">
+        <Link href="/main">
+          <div className="absolute top-[1cm] left-[1cm] flex h-16 w-32 cursor-pointer items-center justify-center rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xl font-semibold shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300">
+            메인으로
+          </div>
+        </Link>
         <div className="container mx-auto py-8 px-4">
           <div className="flex flex-col items-center justify-center mb-10 pt-6 animate-fade-in">
             <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary/10 mb-4 floating">
               <CreditCard className="h-10 w-10 text-primary" />
+            </div>
+            <div>
             </div>
             <h1 className="text-4xl font-bold text-center mb-2 text-gradient">카드 추천 서비스</h1>
             <p className="text-muted-foreground text-center max-w-md">
