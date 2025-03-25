@@ -6,7 +6,7 @@ interface UserData {
     username: string;
     email: string;
     role: string;
-    picture: string;
+    profile: string;
 }
 
 export default function UserInfoPage() {
@@ -57,7 +57,7 @@ export default function UserInfoPage() {
         return <div style={{ color: 'red' }}>{error}</div>;
     }
 
-    console.log(userData?.picture);
+    // console.log(userData?.profile);
 
     return (
         <div>
@@ -68,7 +68,7 @@ export default function UserInfoPage() {
                         <p>아이디: {userData.username}</p>
                         <p>이메일: {userData.email}</p>
                         <p>권한: {userData.role}</p>
-                        <img src={userData.picture} alt="프로필" />
+                        <img src={`${userData.profile}`} alt="프로필" />
                     </>
                 ) : (
                     <p style={{ color: 'red' }}>사용자 정보를 불러올 수 없습니다</p>
