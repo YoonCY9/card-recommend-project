@@ -41,14 +41,6 @@ export default function CreateCardPage() {
         bnfDetail: "",
     });
 
-    // 로그인 상태 체크
-    useEffect(() => {
-        const token = localStorage.getItem("accessToken");
-        if (!token) {
-            alert("로그인이 필요합니다.");
-            router.push("/login");
-        }
-    }, [router]);
 
     // 카드 입력값 변경
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
