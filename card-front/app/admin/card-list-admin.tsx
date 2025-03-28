@@ -7,6 +7,7 @@ import { CreditCard, ArrowRight, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import CardSkeleton from "@/components/card-skeleton";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 
 // API response type (CardResponse)
@@ -50,6 +51,7 @@ export default function CardList({ filters, isAuthenticated }: CardListProps) {
     const [currentPage, setCurrentPage] = useState(1)
     const [totalPages, setTotalPages] = useState(1)
     const [totalCount, setTotalCount] = useState(0)
+    const router = useRouter();
 
 
     const mapMonthlySpendToRecord = (option: string): number | null => {
@@ -150,14 +152,28 @@ export default function CardList({ filters, isAuthenticated }: CardListProps) {
         fetchCards() // 함수 호출
     }, [filters, currentPage])
 
-
     const handleDelete = async (cardId: number) => {
         if (!window.confirm("정말 삭제하시겠습니까?")) return;
-
+        // 쿠키에서 accessToken 가져오기
+        const getCookie = (name: string) => {
+            const cookies = document.cookie.split('; ');
+            const found = cookies.find((cookie) => cookie.startsWith(`${name}=`));
+            return found ? found.split('=')[1] : null;
+        };
+        const token = getCookie("accessToken");
+        if (!token) {
+            alert("로그인이 필요합니다.");
+            router.push("/login");
+            return;
+        }
         try {
             const response = await fetch(`http://localhost:8080/cards/${cardId}`, {
                 method: "DELETE",
-                headers: { "Content-Type": "application/json" }, // 인증 관련 헤더를 삭제합니다.
+                headers: { "Content-Type": "application/json" ,
+                    Authorization: `Bearer ${token}`
+                },
+                credentials: "include",
+               // 인증 관련 헤더를 삭제합니다.
             });
 
             if (!response.ok) {
