@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import {Button} from "@/components/ui/button";
-import {ArrowRight, CreditCard} from "lucide-react";
-import {CardFooter} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { ArrowRight, CreditCard } from "lucide-react";
+import { CardFooter } from "@/components/ui/card";
 
 // 카드 타입 정의
 interface Card {
@@ -25,12 +25,20 @@ const AgeBasedCardRecommendations = () => {
     const [selectedAge, setSelectedAge] = useState("20");
     const [cards, setCards] = useState<Array<Card>>([]);
 
-    // 연령별 추천 카드 ID 매핑 - Array<number> 형태로 명시적 타입 지정
+    // 연령별 추천 카드 ID 매핑
     const cardsByAge: AgeCardMap = {
         "20": [337, 563, 330, 613, 225],
         "30": [422, 341, 283, 197, 524],
         "40": [713, 426, 638, 520, 314],
         "50": [815, 723, 562, 418, 317],
+    };
+
+    // 연령별 설명 내용 (모두 단일 문자열 형식)
+    const explanations: { [key: string]: string } = {
+        "20": "쇼핑/유통, 외식/식음료, 디지털 서비스, 통신/기타, 문화/레저, 여행/항공에 해당하는 카드들입니다.",
+        "30": "쇼핑/유통, 외식/식음료, 교통/자동차, 여행/항공, 생활서비스, 교육/육아, 디지털 서비스 & 통신에 해당하는 카드들입니다.",
+        "40": "쇼핑/유통, 외식/식음료, 교통/자동차, 문화/레저, 생활서비스, 금융서비스, 디지털 서비스 & 통신에 해당하는 카드들입니다.",
+        "50": "쇼핑/유통, 외식/식음료, 여행/항공, 문화/레저, 생활서비스, 금융서비스, 디지털 서비스 & 통신에 해당하는 카드들입니다.",
     };
 
     // 백엔드 API 요청
@@ -82,65 +90,73 @@ const AgeBasedCardRecommendations = () => {
                         연령대별로 카드를 추천해드립니다.
                     </p>
                 </div>
-        <div className="max-w-4xl mx-auto p-4 bg-gray-100 rounded-lg">
-
-            <div className="flex mb-6 gap-2">
-                {Object.keys(cardsByAge).map((age) => (
-                    <button
-                        key={age}
-                        onClick={() => setSelectedAge(age)}
-                        className={`py-2 px-6 rounded-full ${
-                            selectedAge === age ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-700"
-                        }`}
-                    >
-                        {age}대
-                    </button>
-                ))}
-            </div>
-
-            <div className="bg-white rounded-lg shadow-md p-4">
-                <div className="text-lg font-bold mb-4">{selectedAge}대 추천 카드 TOP 5</div>
-
-                {cards && cards.length > 0 ? (
-                    <ul className="space-y-4">
-                        {cards.map((card, index) => (
-                            <li
-                                key={card.id}
-                                className={`flex items-center p-4 rounded-lg shadow-sm border 
-                                  ${index === 0
-                                    ? "bg-gradient-to-r from-gray-800 to-gray-700 text-white transform scale-105 transition-transform duration-200"
-                                    : "bg-white text-gray-800"
-                                }
-                                `}
+                <div className="max-w-4xl mx-auto p-4 bg-gray-100 rounded-lg">
+                    <div className="flex mb-6 gap-2">
+                        {Object.keys(cardsByAge).map((age) => (
+                            <button
+                                key={age}
+                                onClick={() => setSelectedAge(age)}
+                                className={`py-2 px-6 rounded-full ${
+                                    selectedAge === age ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-700"
+                                }`}
                             >
-                                <span className="text-2xl font-bold mr-4">
-                                    {index === 0 ? "TOP 1" : index + 1}
-                                </span>
-                                <img
-                                    src={card.img}
-                                    alt={card.name}
-                                    className="w-100 h-20 object-cover rounded-md mr-4"
-                                />
-                                <div className="flex flex-col">
-                                    <p className={`text-lg font-semibold ${index === 0 ? "text-white" : "text-gray-900"}`}>{card.name}</p>
-                                    <p className={`text-sm ${index === 0 ? "text-gray-300" : "text-gray-500"}`}>{card.brand}</p>
-                                    <CardFooter className="pt-4 mt-auto">
-                                        <Link href={`/cards/${card.id}`} className="w-full">
-                                            <Button className="w-full bg-black  text-white transition-colors">
-                                                <span>상세 정보</span>
-                                                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                                            </Button>
-                                        </Link>
-                                    </CardFooter>
-                                </div>
-                            </li>
+                                {age}대
+                            </button>
                         ))}
-                    </ul>
-                ) : (
-                    <p>추천할 카드가 없습니다.</p>
-                )}
-            </div>
-        </div>
+                    </div>
+
+                    <div className="bg-white rounded-lg shadow-md p-4">
+                        <div className="text-lg font-bold mb-4">{selectedAge}대 추천 카드 TOP 5</div>
+                        {/* 선택된 연령대에 따른 설명란 */}
+                        <p className="mb-4 text-sm text-gray-600">
+                            {explanations[selectedAge]}
+                        </p>
+
+                        {cards && cards.length > 0 ? (
+                            <ul className="space-y-4">
+                                {cards.map((card, index) => (
+                                    <li
+                                        key={card.id}
+                                        className={`flex items-center p-4 rounded-lg shadow-sm border 
+                      ${
+                                            index === 0
+                                                ? "bg-gradient-to-r from-gray-800 to-gray-700 text-white transform scale-105 transition-transform duration-200"
+                                                : "bg-white text-gray-800"
+                                        }
+                    `}
+                                    >
+                    <span className="text-2xl font-bold mr-4">
+                      {index === 0 ? "TOP 1" : index + 1}
+                    </span>
+                                        <img
+                                            src={card.img}
+                                            alt={card.name}
+                                            className="w-100 h-20 object-cover rounded-md mr-4"
+                                        />
+                                        <div className="flex flex-col">
+                                            <p className={`text-lg font-semibold ${index === 0 ? "text-white" : "text-gray-900"}`}>
+                                                {card.name}
+                                            </p>
+                                            <p className={`text-sm ${index === 0 ? "text-gray-300" : "text-gray-500"}`}>
+                                                {card.brand}
+                                            </p>
+                                            <CardFooter className="pt-4 mt-auto">
+                                                <Link href={`/cards/${card.id}`} className="w-full">
+                                                    <Button className="w-full bg-black text-white transition-colors">
+                                                        <span>상세 정보</span>
+                                                        <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                                                    </Button>
+                                                </Link>
+                                            </CardFooter>
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p>추천할 카드가 없습니다.</p>
+                        )}
+                    </div>
+                </div>
             </div>
         </main>
     );
