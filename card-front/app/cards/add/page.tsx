@@ -24,14 +24,14 @@ export default function CreateCardPage() {
         cardName: "",
         domesticOffer: {
             type: "", // "Domestic" 또는 ""
-            amount: 0,
+            amount: null,
         },
         overseasOffer: {
             type: "", // "Overseas" 또는 ""
-            amount: 0,
+            amount: null,
         },
         cardImage: "",
-        record: 0,
+        record: null,
         cardOverseas: [""],
     });
 
@@ -160,29 +160,42 @@ export default function CreateCardPage() {
         <div className="max-w-lg mx-auto p-6 bg-white rounded shadow">
             <h1 className="text-xl font-bold mb-4">카드 & 혜택 생성</h1>
             <form onSubmit={handleSubmit} className="space-y-4">
-                <input type="text" name="cardBrand" placeholder="카드 브랜드" value={card.cardBrand} onChange={handleChange} className="w-full p-2 border rounded" />
-                <input type="text" name="cardName" placeholder="카드 이름" value={card.cardName} onChange={handleChange} className="w-full p-2 border rounded" />
+                <select name="cardBrand" value={card.cardBrand} onChange={handleChange} className="w-full p-2 border rounded">
+                <option value="신한카드"> 신한카드 </option>
+                <option value="삼성카드"> 삼성카드 </option>
+                <option value="현대카드"> 현대카드 </option>
+                <option value="KB카드"> KB카드 </option>
+                <option value="우리카드"> 우리카드 </option>
+                <option value="롯데카드"> 롯데카드 </option>
+                <option value="NH카드"> NH카드 </option>
+                <option value="하나카드"> 하나카드 </option>
+                <option value="BC카드"> BC카드 </option>
+                <option value="씨티카드"> 씨티카드 </option>
+                <option value="카카오카드"> 카카오카드 </option>
+                <option value="토스카드"> 토스카드 </option>
+                </select>
+                <input type="text" name="cardName" placeholder="카드 이름" value={card.cardName||''} onChange={handleChange} className="w-full p-2 border rounded" />
 
                 {/* 국내 사용 여부 */}
                 <select name="Domestic" value={card.domesticOffer.type} onChange={handleChange} className="w-full p-2 border rounded">
                     <option value="Domestic">국내 사용 가능</option>
                     <option value="">국내 사용 불가</option>
                 </select>
-                <input type="number" name="domesticOfferAmount" placeholder="국내 혜택 금액" value={card.domesticOffer.amount} onChange={handleChange} className="w-full p-2 border rounded" />
+                <input type="number" name="domesticOfferAmount" placeholder="국내 혜택 금액" value={card.domesticOffer.amount || ''} onChange={handleChange} className="w-full p-2 border rounded" />
 
                 {/* 해외 사용 여부 */}
                 <select name="Overseas" value={card.overseasOffer.type} onChange={handleChange} className="w-full p-2 border rounded">
                     <option value="Overseas">해외 사용 가능</option>
                     <option value="">해외 사용 불가</option>
                 </select>
-                <input type="number" name="overseasOfferAmount" placeholder="해외 혜택 금액" value={card.overseasOffer.amount} onChange={handleChange} className="w-full p-2 border rounded" />
+                <input type="number" name="overseasOfferAmount" placeholder="해외 혜택 금액" value={card.overseasOffer.amount||''} onChange={handleChange} className="w-full p-2 border rounded" />
 
-                <input type="text" name="cardImage" placeholder="카드 이미지 URL" value={card.cardImage} onChange={handleChange} className="w-full p-2 border rounded" />
-                <input type="number" name="record" placeholder="전월 실적" value={card.record} onChange={handleChange} className="w-full p-2 border rounded" />
+                <input type="text" name="cardImage" placeholder="카드 이미지 URL" value={card.cardImage||''} onChange={handleChange} className="w-full p-2 border rounded" />
+                <input type="number" name="record" placeholder="전월 실적" value={card.record||''} onChange={handleChange} className="w-full p-2 border rounded" />
 
                 {/* 해외 사용 브랜드 입력 */}
                 {card.cardOverseas.map((content, index) => (
-                    <input key={index} type="text" placeholder="해외 사용 브랜드" value={content} onChange={(e) => handleArrayChange(index, e.target.value)} className="w-full p-2 border rounded" />
+                    <input key={index} type="text" placeholder="해외 사용 브랜드" value={content||''} onChange={(e) => handleArrayChange(index, e.target.value)} className="w-full p-2 border rounded" />
                 ))}
                 <button type="button" onClick={addOverseasBrand} className="w-full bg-gray-300 py-2 rounded">
                     해외 브랜드 추가
@@ -195,8 +208,8 @@ export default function CreateCardPage() {
                         <option key={option.value} value={option.value}>{option.label}</option>
                     ))}
                 </select>
-                <input type="text" name="bnfContent" placeholder="혜택 내용" value={benefit.bnfContent} onChange={handleBenefitChange} className="w-full p-2 border rounded" />
-                <input type="text" name="bnfDetail" placeholder="혜택 상세" value={benefit.bnfDetail} onChange={handleBenefitChange} className="w-full p-2 border rounded" />
+                <input type="text" name="bnfContent" placeholder="혜택 내용" value={benefit.bnfContent||''} onChange={handleBenefitChange} className="w-full p-2 border rounded" />
+                <input type="text" name="bnfDetail" placeholder="혜택 상세" value={benefit.bnfDetail||''} onChange={handleBenefitChange} className="w-full p-2 border rounded" />
 
                 <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded">카드 & 혜택 생성</button>
             </form>
