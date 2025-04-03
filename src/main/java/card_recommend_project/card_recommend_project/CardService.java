@@ -32,6 +32,8 @@ public class CardService {
                         c.getId(),
                         c.getCardName(),
                         c.getCardImg(),
+                        c.getSafeDomesticOfferAmount(),
+                        c.getSafeOverseasOfferAmount(),
                         cardBenefitRepository.findByCardId_Id(c.getId()).stream().map(b -> b.getBnfContent()).toList(),
                         c.getCardRecord(),
                         c.getCardBrand()
@@ -86,6 +88,8 @@ public class CardService {
         return new CardResponse(card.getId(),
                 card.getCardName(),
                 card.getCardImg(),
+                card.getSafeDomesticOfferAmount(),
+                card.getSafeOverseasOfferAmount(),
                 null,
                 cardRequest.record(),
                 card.getCardBrand());
