@@ -32,6 +32,15 @@ export default function Home() {
                             </p>
                         </div>
                     </Link>
+
+                    <Link href="http://localhost:3000/recommand">
+                        <div className="group flex h-64 w-97 cursor-pointer items-center justify-center rounded-xl bg-white/80 text-black border-2 border-gray-200 shadow-lg transition-all hover:shadow-xl hover:scale-105 p-6 relative overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-tr from-gray-50 to-gray-100 opacity-40 group-hover:opacity-60 transition-all duration-300"></div>
+                            <p className="relative text-center text-xl font-semibold tracking-wide">
+                                📊 소비 패턴 분석 및 맞춤 카드 추천
+                            </p>
+                        </div>
+                    </Link>
                 </div>
             </div>
         </div>
