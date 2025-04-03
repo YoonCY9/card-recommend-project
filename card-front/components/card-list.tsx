@@ -26,8 +26,8 @@ interface CardResponse {
     bnfContent: string[]
     record: number
     brand: string
-    domesticOfferAmount: string
-    overseasOfferAmount: string
+    domesticOfferAmount: number
+    overseasOfferAmount: number
     bnfDetail?: string
     totalCount: number
 }
@@ -142,10 +142,12 @@ export default function CardList({ filters }: CardListProps) {
                 }
                 // 응답을 PageResponse 형태로 받음
                 const pageData = await res.json() as PageResponse
+                console.log("API 응답 데이터:", pageData);
 
 
                 // 카드 데이터와 페이지 정보 설정
                 setCards(pageData.cardResponse);
+                console.log("cardResponse  데이터:",pageData.cardResponse);
                 setTotalPages(pageData.totalPages);
                 setTotalCount(pageData.totalCount);
                 setLoading(false)
@@ -355,8 +357,10 @@ export default function CardList({ filters }: CardListProps) {
                                         </div>
 
                                         <div className="absolute bottom-2 left-2 right-2 z-20 bg-black/40 backdrop-blur-sm text-white text-xs p-2 rounded-md">
-                                            <div className="flex justify-between items-center ">
-                                                <span>연회비: {"10,000원"}</span>
+                                            <div className="flex justify-between items-center">
+                                                <span className="w-1/2 text-center">국내 연회비: {card.domesticOfferAmount ?? "N/A"} 원</span>
+                                                <span>|</span>
+                                                <span className="w-1/2 text-center">해외 연회비: {card.overseasOfferAmount ?? "N/A"} 원</span>
                                             </div>
                                         </div>
                                     </div>

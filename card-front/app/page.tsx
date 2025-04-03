@@ -148,21 +148,32 @@ export default function CardRecommendationPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-mesh">
-      <Link href="/main">
-        <div className="absolute top-[1cm] left-[1cm] flex h-16 w-32 cursor-pointer items-center justify-center rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xl font-semibold shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300">
-          메인으로
-        </div>
-      </Link>
-      <Link href="/me">
-        <div className="absolute top-[1cm] left-[5cm] flex h-16 w-32 cursor-pointer items-center justify-center rounded-lg bg-gradient-to-r from-blue-500 bg-blue-400 text-white text-xl font-semibold shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300">
-          마이페이지
-        </div>
-      </Link>
-      <div className="container mx-auto py-8 px-4">
-        <div className="flex flex-col items-center justify-center mb-10 pt-6 animate-fade-in">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary/10 mb-4 floating">
-            <CreditCard className="h-10 w-10 text-primary" />
+      <main className="min-h-screen bg-mesh">
+        <Link href="/main">
+          <div className="absolute top-[1cm] left-[1cm] flex h-10 w-20 cursor-pointer items-center justify-center rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 text-white text-m font-semibold shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+              <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+            </svg>
+
+          </div>
+        </Link>
+
+        {/*<Link href="/me">*/}
+        {/*  <div className="absolute top-[1cm] left-[5cm] flex h-16 w-32 cursor-pointer items-center justify-center rounded-lg bg-gradient-to-r from-blue-500 bg-blue-400 text-white text-xl font-semibold shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300">*/}
+        {/*    유저정보*/}
+        {/*  </div>*/}
+        {/*</Link>*/}
+        <div className="container mx-auto py-8 px-4">
+          <div className="flex flex-col items-center justify-center mb-10 pt-6 animate-fade-in">
+            <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary/10 mb-4 floating">
+              <CreditCard className="h-10 w-10 text-primary" />
+            </div>
+            <div>
+            </div>
+            <h1 className="text-4xl font-bold text-center mb-2 text-gradient">카드 추천 서비스</h1>
+            <p className="text-muted-foreground text-center max-w-md">
+              나에게 맞는 최적의 카드를 찾아보세요. 혜택, 브랜드, 사용액에 따라 맞춤형 카드를 추천해드립니다.
+            </p>
           </div>
           <div></div>
           <h1 className="text-4xl font-bold text-center mb-2 text-gradient">
@@ -261,37 +272,35 @@ export default function CardRecommendationPage() {
                 </div>
               </div>
 
-              <div className="flex justify-end gap-2 pt-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() =>
-                    setFilters({
-                      benefits: [],
-                      brands: [],
-                      monthlySpend: [],
-                      annualFee: [],
-                      keyward: "",
-                    })
-                  }
-                  className="px-4 py-2 text-sm"
-                >
-                  필터 초기화
-                </Button>
-                <Label className="text-sm font-medium flex items-center gap-2"></Label>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="text"
-                    placeholder="카드명 검색"
-                    value={filters.keyward}
-                    onChange={(e) =>
-                      setFilters((prev) => ({
-                        ...prev,
-                        keyward: e.target.value,
-                      }))
-                    }
-                    className="flex-grow border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary text-sm"
-                  />
+                <div className="flex justify-end gap-2 pt-2">
+                  <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() =>
+                          setFilters({
+                            benefits: [],
+                            brands: [],
+                            monthlySpend: [],
+                            annualFee: [],
+                            keyward: ""
+                          })
+                      }
+                  >
+                    필터 초기화
+                  </Button>
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2">
+                      <input
+                          type="text"
+                          placeholder="카드명 검색"
+                          value={filters.keyward}
+                          onChange={(e) =>
+                              setFilters(prev => ({ ...prev, keyward: e.target.value }))
+                          }
+                          className="flex-grow border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
