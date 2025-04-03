@@ -232,8 +232,6 @@ const benefitOptions = [
                     필터 초기화
                   </Button>
                   <div className="space-y-3">
-                    <Label className="text-sm font-medium flex items-center gap-2">
-                    </Label>
                     <div className="flex items-center gap-2">
                       <input
                           type="text"
