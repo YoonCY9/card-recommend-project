@@ -7,6 +7,15 @@ import { CreditCard, ArrowRight, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import CardSkeleton from "@/components/card-skeleton";
 import Link from "next/link";
+import {
+    Pagination,
+    PaginationContent,
+    PaginationEllipsis,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious,
+} from "@/components/ui/pagination";
 
 
 // API response type (CardResponse)
@@ -152,52 +161,118 @@ export default function CardList({ filters }: CardListProps) {
     }, [filters, currentPage])
 
 
+
+
     // 페이지네이션 버튼을 생성하는 함수
     const generatePaginationButtons = () => {
-        const buttons = []
-        const maxVisibleButtons = 8 // 한 번에 보여줄 최대 버튼 수
+        const items = []
+        const maxVisibleButtons = 8 // 한 번에 보여줄 최대 페이지 버튼 수
 
-        const displayPage = currentPage
-
-        let startPage = Math.max(1, displayPage - Math.floor(maxVisibleButtons / 2))
-        const endPage = Math.min(totalPages, startPage + maxVisibleButtons - 1)
+// 가운데로 위치하도록 시작 및 끝 페이지 계산
+        let startPage = Math.max(1, currentPage - Math.floor(maxVisibleButtons / 2))
+        let endPage = Math.min(totalPages, startPage + maxVisibleButtons - 1)
 
         if (endPage - startPage + 1 < maxVisibleButtons) {
             startPage = Math.max(1, endPage - maxVisibleButtons + 1)
         }
 
-        // 이전 페이지 버튼
+// 이전 페이지 버튼 (현재 페이지가 1보다 클 때)
         if (currentPage > 1) {
-            buttons.push(
-                <button key="prev" onClick={() => setCurrentPage(currentPage - 1)} className="px-3 py-1 border rounded">
-                    이전
-                </button>
+            items.push(
+                <PaginationItem key="prev">
+                    <PaginationPrevious
+                        href="#"
+                        onClick={(e) => {
+                            e.preventDefault()
+                            setCurrentPage(currentPage - 1)
+                        }}
+                    />
+                </PaginationItem>
             )
         }
 
-        // 페이지 번호 버튼
+// 시작 페이지가 1이 아닐 경우: 1페이지와 생략(...) 버튼 추가
+        if (startPage > 1) {
+            items.push(
+                <PaginationItem key={1}>
+                    <PaginationLink
+                        href="#"
+                        onClick={(e) => {
+                            e.preventDefault()
+                            setCurrentPage(1)
+                        }}
+                    >
+                        1
+                    </PaginationLink>
+                </PaginationItem>
+            )
+            if (startPage > 2) {
+                items.push(
+                    <PaginationItem key="start-ellipsis">
+                        <PaginationEllipsis />
+                    </PaginationItem>
+                )
+            }
+        }
+
+// 계산된 시작 페이지부터 끝 페이지까지 페이지 번호 버튼 생성
         for (let i = startPage; i <= endPage; i++) {
-            buttons.push(
-                <button
-                    key={i}
-                    onClick={() => setCurrentPage(i)}
-                    className={`px-3 py-1 border rounded ${i === displayPage ? "bg-blue-500 text-white" : "bg-white"}`}
-                >
-                    {i}
-                </button>
+            items.push(
+                <PaginationItem key={i}>
+                    <PaginationLink
+                        href="#"
+                        isActive={i === currentPage}
+                        onClick={(e) => {
+                            e.preventDefault()
+                            setCurrentPage(i)
+                        }}
+                    >
+                        {i}
+                    </PaginationLink>
+                </PaginationItem>
             )
         }
 
-        // 다음 페이지 버튼
+// 마지막 페이지가 endPage보다 클 경우: 생략(...) 버튼과 마지막 페이지 버튼 추가
+        if (endPage < totalPages) {
+            if (endPage < totalPages - 1) {
+                items.push(
+                    <PaginationItem key="end-ellipsis">
+                        <PaginationEllipsis />
+                    </PaginationItem>
+                )
+            }
+            items.push(
+                <PaginationItem key={totalPages}>
+                    <PaginationLink
+                        href="#"
+                        onClick={(e) => {
+                            e.preventDefault()
+                            setCurrentPage(totalPages)
+                        }}
+                    >
+                        {totalPages}
+                    </PaginationLink>
+                </PaginationItem>
+            )
+        }
+
+// 다음 페이지 버튼 (현재 페이지가 totalPages보다 작을 때)
         if (currentPage < totalPages) {
-            buttons.push(
-                <button key="next" onClick={() => setCurrentPage(currentPage + 1)} className="px-3 py-1 border rounded">
-                    다음
-                </button>
+            items.push(
+                <PaginationItem key="next">
+                    <PaginationNext
+                        href="#"
+                        onClick={(e) => {
+                            e.preventDefault()
+                            setCurrentPage(currentPage + 1)
+                        }}
+                    />
+                </PaginationItem>
             )
         }
 
-        return buttons
+        return items
     }
 
 
@@ -320,9 +395,13 @@ export default function CardList({ filters }: CardListProps) {
                     ))}
                 </div>
             )}
-            {/* 페이지네이션 UI */}
-            <div className="flex justify-center mt-4 space-x-2">
-                {generatePaginationButtons()}
+             {/*페이지네이션 UI*/}
+            <div className="mt-4">
+                <Pagination>
+                    <PaginationContent>
+                        {generatePaginationButtons()}
+                    </PaginationContent>
+                </Pagination>
             </div>
         </div>
     )

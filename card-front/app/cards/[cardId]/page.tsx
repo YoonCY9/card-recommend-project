@@ -184,14 +184,14 @@ export default function CardDetailPage() {
                         )}
                         {(card.domesticOfferType || card.domesticOfferAmount) && (
                             <p>
-                                <strong>국내 혜택:</strong>{" "}
-                                {card.domesticOfferType} {card.domesticOfferAmount}원
+                                <strong>국내 연회비:</strong>{" "}
+                                {card.domesticOfferAmount}원
                             </p>
                         )}
                         {(card.overseasOfferType || card.overseasOfferAmount) && (
                             <p>
-                                <strong>해외 혜택:</strong>{" "}
-                                {card.overseasOfferType} {card.overseasOfferAmount}원
+                                <strong>해외 연회비:</strong>{" "}
+                                {card.overseasOfferAmount}원
                             </p>
                         )}
                         {card.cardOverseas && card.cardOverseas.length > 0 && (
