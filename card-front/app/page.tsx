@@ -119,6 +119,7 @@ const benefitOptions = [
 
           </div>
         </Link>
+
         {/*<Link href="/me">*/}
         {/*  <div className="absolute top-[1cm] left-[5cm] flex h-16 w-32 cursor-pointer items-center justify-center rounded-lg bg-gradient-to-r from-blue-500 bg-blue-400 text-white text-xl font-semibold shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300">*/}
         {/*    유저정보*/}
