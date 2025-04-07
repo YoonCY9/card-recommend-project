@@ -1,7 +1,8 @@
-package card_recommend_project.card_recommend_project;
+package card_recommend_project.card_recommend_project.entity;
 
+import card_recommend_project.card_recommend_project.cardBenefit.Category;
+import card_recommend_project.card_recommend_project.card.Card;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 
 @Entity

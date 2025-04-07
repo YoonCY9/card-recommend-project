@@ -1,9 +1,12 @@
-package card_recommend_project.card_recommend_project;
+package card_recommend_project.card_recommend_project.card;
 
-import card_recommend_project.card_recommend_project.dto.CardBenefitResponse;
-import card_recommend_project.card_recommend_project.dto.CardDetailResponse;
-import card_recommend_project.card_recommend_project.dto.CardResponse;
-import card_recommend_project.card_recommend_project.dto.PageResponse;
+import card_recommend_project.card_recommend_project.cardBenefit.Category;
+import card_recommend_project.card_recommend_project.cardBenefit.Offer;
+import card_recommend_project.card_recommend_project.cardRelevantRepository.CardBenefitRepository;
+import card_recommend_project.card_recommend_project.cardRelevantRepository.CardQueryRepository;
+import card_recommend_project.card_recommend_project.cardRelevantRepository.CardRepository;
+import card_recommend_project.card_recommend_project.dto.*;
+import card_recommend_project.card_recommend_project.entity.CardBenefit;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
