@@ -1,7 +1,7 @@
-package card_recommend_project.card_recommend_project;
+package card_recommend_project.card_recommend_project.cardBenefit;
 
+import card_recommend_project.card_recommend_project.card.Card_In_Out;
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.Getter;
 

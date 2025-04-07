@@ -1,6 +1,11 @@
-package card_recommend_project.card_recommend_project;
+package card_recommend_project.card_recommend_project.cardBenefit;
 
+import card_recommend_project.card_recommend_project.card.Card;
+import card_recommend_project.card_recommend_project.cardRelevantRepository.CardBenefitRepository;
+import card_recommend_project.card_recommend_project.cardRelevantRepository.CardRepository;
+import card_recommend_project.card_recommend_project.dto.CardBenefitRequest;
 import card_recommend_project.card_recommend_project.dto.CardBenefitResponse;
+import card_recommend_project.card_recommend_project.entity.CardBenefit;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +26,7 @@ public class CardBenefitService {
     public CardBenefitResponse create(CardBenefitRequest request) {
         Card card = cardRepository.findById(request.cardId()).orElseThrow(
                 () -> new NoSuchElementException("해당하는 카드가 없습니다."));
+
         CardBenefit cardBenefit = cardBenefitRepository.save(new CardBenefit(request.bnfName(), request.bnfContent(), request.bnfDetail(), card));
         return new CardBenefitResponse(
                 cardBenefit.getBnfName(),

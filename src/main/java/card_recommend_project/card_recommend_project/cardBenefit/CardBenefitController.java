@@ -1,5 +1,6 @@
-package card_recommend_project.card_recommend_project;
+package card_recommend_project.card_recommend_project.cardBenefit;
 
+import card_recommend_project.card_recommend_project.dto.CardBenefitRequest;
 import card_recommend_project.card_recommend_project.dto.CardBenefitResponse;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

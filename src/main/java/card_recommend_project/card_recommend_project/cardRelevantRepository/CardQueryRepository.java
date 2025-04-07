@@ -1,5 +1,10 @@
-package card_recommend_project.card_recommend_project;
+package card_recommend_project.card_recommend_project.cardRelevantRepository;
 
+import card_recommend_project.card_recommend_project.card.Card;
+import card_recommend_project.card_recommend_project.card.QCard;
+import card_recommend_project.card_recommend_project.cardBenefit.Category;
+import card_recommend_project.card_recommend_project.cardBenefit.QOffer;
+import card_recommend_project.card_recommend_project.entity.QCardBenefit;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;

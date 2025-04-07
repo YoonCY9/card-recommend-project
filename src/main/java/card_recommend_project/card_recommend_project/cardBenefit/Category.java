@@ -1,4 +1,4 @@
-package card_recommend_project.card_recommend_project;
+package card_recommend_project.card_recommend_project.cardBenefit;
 
 public enum Category {
     SHOPPING_RETAIL,

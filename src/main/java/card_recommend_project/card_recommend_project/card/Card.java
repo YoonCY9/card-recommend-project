@@ -1,5 +1,6 @@
-package card_recommend_project.card_recommend_project;
+package card_recommend_project.card_recommend_project.card;
 
+import card_recommend_project.card_recommend_project.cardBenefit.Offer;
 import jakarta.persistence.*;
 import lombok.Getter;
 

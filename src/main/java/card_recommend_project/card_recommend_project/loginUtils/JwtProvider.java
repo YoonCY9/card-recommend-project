@@ -74,6 +74,8 @@ public class JwtProvider {
 
     // 토큰에서 로그인한 사용자의 email을 추출하는 함수
     public String getSubject(String token) {
+//        Claims claims = parseToken(token); // supabase 활용 uuid 받아내는 로직
+//        return claims.getSubject();
         return parseToken(token)
                 .getSubject();
     }

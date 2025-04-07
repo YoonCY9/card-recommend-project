@@ -1,12 +1,13 @@
-package card_recommend_project.card_recommend_project;
+package card_recommend_project.card_recommend_project.card;
 
+import card_recommend_project.card_recommend_project.cardBenefit.Category;
 import card_recommend_project.card_recommend_project.dto.CardDetailResponse;
 import card_recommend_project.card_recommend_project.dto.CardResponse;
+import card_recommend_project.card_recommend_project.dto.CreateCardRequest;
 import card_recommend_project.card_recommend_project.dto.PageResponse;
 import card_recommend_project.card_recommend_project.loginUtils.LoginMember;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
